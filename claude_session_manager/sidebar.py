@@ -19,6 +19,7 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, Gdk, Gio, GLib, GObject, Gtk  # noqa: E402
 
+from .formatting import format_size
 from .models import FAV_GROUP, SessionItem
 from .store import SessionStore
 
@@ -258,6 +259,15 @@ class SessionSidebar(Gtk.Box):
 
         self._view.add_bottom_bar(self._build_action_bar())
 
+        # -- status footer ----------------------------------------------------
+        self.footer = Gtk.Label()
+        self.footer.add_css_class("dim-label")
+        self.footer.add_css_class("caption")
+        self.footer.set_margin_top(4)
+        self.footer.set_margin_bottom(6)
+        self.footer.set_ellipsize(_ELLIPSIZE_END)
+        self._view.add_bottom_bar(self.footer)
+
     # -- store sync ------------------------------------------------------------
 
     def _on_store_refreshed(self, store: SessionStore, order_changed: bool) -> None:
@@ -267,6 +277,22 @@ class SessionSidebar(Gtk.Box):
         self._update_selection_label()
         self._invalidate()
         self._content_stack.set_visible_child_name("empty" if not store.sessions else "list")
+        self.update_footer()
+
+    def update_footer(self) -> None:
+        sessions = self.store.sessions.values()
+        projects = {s.project_name for s in sessions}
+        open_tabs = sum(
+            1 for sid in self.store.sessions if (item := self.store.get_item(sid)) and item.status
+        )
+        parts = [
+            f"{len(sessions)} sessions",
+            f"{len(projects)} projects",
+            format_size(sum(s.size for s in sessions)),
+        ]
+        if open_tabs:
+            parts.append(f"{open_tabs} open")
+        self.footer.set_label(" · ".join(parts))
 
     def _rebuild_rows(self) -> None:
         self.list.remove_all()

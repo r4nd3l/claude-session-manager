@@ -32,6 +32,7 @@ class TerminalTab(Gtk.ScrolledWindow):
         super().__init__()
         self.session_id = session_id
         self.fork = fork
+        self._child_pid: int | None = None
 
         self.terminal = Vte.Terminal()
         self.terminal.set_scrollback_lines(10_000)
@@ -92,13 +93,30 @@ class TerminalTab(Gtk.ScrolledWindow):
     def _on_spawned(self, terminal: Vte.Terminal, pid: int, error: GLib.Error | None) -> None:
         if error is not None:
             self.feed_message(f"failed to start shell: {error.message}")
-        elif self._initial_command:
+            return
+        self._child_pid = pid
+        if self._initial_command:
             terminal.feed_child(f"{self._initial_command}\n".encode())
 
     def _on_child_exited(self, terminal: Vte.Terminal, status: int) -> None:
         self.emit("process-exited", status)
 
     # -- helpers -----------------------------------------------------------
+
+    def has_running_command(self) -> bool:
+        """True when something other than the shell (e.g. claude) owns the
+        terminal's foreground — the cue terminal emulators use for
+        close-confirmation."""
+        if self._child_pid is None:
+            return False
+        pty = self.terminal.get_pty()
+        if pty is None:
+            return False
+        try:
+            foreground = os.tcgetpgrp(pty.get_fd())
+            return foreground not in (-1, os.getpgid(self._child_pid))
+        except OSError:
+            return False
 
     def apply_settings(self, settings: dict) -> None:
         font = settings.get("font") or ""

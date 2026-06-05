@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import threading
 from collections.abc import Callable
-from datetime import datetime
 
 import gi
 
@@ -12,6 +11,7 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
 from gi.repository import Adw, GLib, Gtk  # noqa: E402
 
+from .formatting import format_size, format_timestamp, format_tokens
 from .sessions import Session, SessionDetails, parse_details
 
 
@@ -59,33 +59,6 @@ def error_dialog(parent: Gtk.Widget, heading: str, body: str) -> None:
 # -- session details ----------------------------------------------------------
 
 
-def _format_tokens(count: int) -> str:
-    if count >= 1_000_000:
-        return f"{count / 1_000_000:.1f}M"
-    if count >= 1_000:
-        return f"{count / 1_000:.1f}k"
-    return str(count)
-
-
-def _format_size(size: float) -> str:
-    for unit in ("B", "KB", "MB", "GB"):
-        if size < 1024 or unit == "GB":
-            return f"{size:.0f} {unit}" if unit == "B" else f"{size:.1f} {unit}"
-        size /= 1024
-    return f"{size} B"
-
-
-def _format_timestamp(ts: str | None) -> str:
-    if not ts:
-        return "—"
-    try:
-        return (
-            datetime.fromisoformat(ts.replace("Z", "+00:00")).astimezone().strftime("%Y-%m-%d %H:%M")
-        )
-    except ValueError:
-        return ts
-
-
 def details_dialog(parent: Gtk.Widget, session: Session, title: str) -> None:
     group = Adw.PreferencesGroup()
     spinner_row = Adw.ActionRow(title="Reading transcript…")
@@ -119,18 +92,18 @@ def details_dialog(parent: Gtk.Widget, session: Session, title: str) -> None:
 
         add("Session ID", session.session_id)
         add("Directory", session.cwd or "unknown")
-        add("Created", _format_timestamp(details.first_timestamp))
-        add("Last activity", _format_timestamp(details.last_timestamp))
+        add("Created", format_timestamp(details.first_timestamp))
+        add("Last activity", format_timestamp(details.last_timestamp))
         add("Messages", f"{details.user_messages} user · {details.assistant_messages} assistant")
         add("Tool calls", str(details.tool_calls))
         add("Models", ", ".join(details.models) or "—")
         add(
             "Tokens",
-            f"{_format_tokens(details.input_tokens)} in · "
-            f"{_format_tokens(details.output_tokens)} out · "
-            f"{_format_tokens(details.cache_read_tokens)} cache-read",
+            f"{format_tokens(details.input_tokens)} in · "
+            f"{format_tokens(details.output_tokens)} out · "
+            f"{format_tokens(details.cache_read_tokens)} cache-read",
         )
-        add("Transcript size", _format_size(details.file_size))
+        add("Transcript size", format_size(details.file_size))
         page.add(info)
         return GLib.SOURCE_REMOVE
 

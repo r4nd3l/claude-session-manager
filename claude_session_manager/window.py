@@ -36,6 +36,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         self.store = SessionStore(self.state)
         self._pages: dict[str, Adw.TabPage] = {}  # session_id -> open tab
+        self._confirmed_closes: set[Adw.TabPage] = set()
 
         self._install_actions()
         self._install_shortcuts()
@@ -225,6 +226,10 @@ class MainWindow(Adw.ApplicationWindow):
         if page is not None:
             self.tab_view.close_page(page)
 
+    def _close_confirmed(self, page: Adw.TabPage) -> None:
+        self._confirmed_closes.add(page)
+        self.tab_view.close_page(page)
+
     def _sync_status(self, session_id: str) -> None:
         page = self._pages.get(session_id)
         if page is None:
@@ -234,6 +239,7 @@ class MainWindow(Adw.ApplicationWindow):
         else:
             status = "open"
         self.store.set_status(session_id, status)
+        self.sidebar.update_footer()
 
     def _session_id_of(self, page: Adw.TabPage) -> str | None:
         tab = page.get_child()
@@ -264,6 +270,23 @@ class MainWindow(Adw.ApplicationWindow):
         self.tab_view.close_page(page)
 
     def _on_close_page(self, view: Adw.TabView, page: Adw.TabPage) -> bool:
+        tab = page.get_child()
+        if (
+            isinstance(tab, TerminalTab)
+            and page not in self._confirmed_closes
+            and tab.has_running_command()
+        ):
+            dialogs.confirm_dialog(
+                self,
+                "Close tab?",
+                f"A command is still running in “{page.get_title()}”.\n"
+                "Closing the tab will terminate it.",
+                "Close Tab",
+                lambda: self._close_confirmed(page),
+            )
+            view.close_page_finish(page, False)  # keep the tab for now
+            return True
+        self._confirmed_closes.discard(page)
         session_id = self._session_id_of(page)
         if session_id:
             self._pages.pop(session_id, None)

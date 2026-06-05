@@ -31,6 +31,7 @@ class Session:
     cwd: str | None  # project directory recorded in the transcript
     preview: str  # first user message, truncated
     mtime: float  # last activity (file mtime)
+    size: int = 0  # transcript size in bytes
 
     @property
     def project_name(self) -> str:
@@ -110,6 +111,7 @@ def discover_sessions() -> list[Session]:
                     cwd=cwd,
                     preview=preview,
                     mtime=stat.st_mtime,
+                    size=stat.st_size,
                 )
             )
     sessions.sort(key=lambda s: s.mtime, reverse=True)
