@@ -3,12 +3,16 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 
-CLAUDE_PROJECTS_DIR = Path.home() / ".claude" / "projects"
+# Override with CSM_PROJECTS_DIR for demos and development.
+CLAUDE_PROJECTS_DIR = Path(
+    os.environ.get("CSM_PROJECTS_DIR") or Path.home() / ".claude" / "projects"
+)
 
 # Session transcripts are named <uuid>.jsonl; skip anything else (agent files, etc.)
 _UUID_RE = re.compile(

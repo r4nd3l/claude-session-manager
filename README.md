@@ -5,6 +5,8 @@ Native GTK4/libadwaita desktop app to manage [Claude Code](https://claude.com/cl
 > **Unofficial community tool.** Not affiliated with or endorsed by Anthropic.
 > It never modifies Claude Code's own data — all app state lives in its own config file.
 
+![Claude Session Manager](data/screenshot.png)
+
 Features:
 
 - **Sidebar** lists every session found under `~/.claude/projects/`, grouped by project (collapsible headers, with collapse-all/expand-all buttons next to the search box), with a **Favorites** section pinned on top — star a session to move it there. A **search box** filters by name, project, preview, or session id, and the list **updates live** as sessions are created or written to.
