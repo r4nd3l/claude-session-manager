@@ -50,7 +50,17 @@ Plus the [`claude` CLI](https://claude.com/claude-code) on your `PATH`.
 > Installing with `pipx`? PyGObject comes from the system, so use
 > `pipx install --system-site-packages claude-session-manager`.
 
-## Run
+## Install
+
+**Debian/Ubuntu — .deb package** (from the [latest release](https://github.com/r4nd3l/claude-session-manager/releases/latest)):
+
+```bash
+sudo apt install ./claude-session-manager_0.1.0_all.deb
+```
+
+Dependencies are pulled in automatically; the app appears in your app grid as "Claude Session Manager".
+
+**From source:**
 
 ```bash
 cd ClaudeSessionManager
@@ -79,6 +89,9 @@ data/
 ├── eu.zengo.ClaudeSessionManager.desktop   # launcher template
 ├── icons/eu.zengo.ClaudeSessionManager.svg # app icon
 └── install.sh                              # install launcher + icon for current user
+scripts/
+├── build_deb.sh                            # build the .deb package into dist/
+└── make_demo_data.py                       # fake sessions for screenshots/demos
 ```
 
 ## Roadmap
