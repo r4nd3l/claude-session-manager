@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1000" height="420" viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a2620"/>
+      <stop offset="1" stop-color="#1a1714"/>
+    </linearGradient>
+  </defs>
+  <rect width="1000" height="420" fill="url(#bg)"/>
+
+  <!-- coral asterisk mark -->
+  <g stroke="#D97757" stroke-width="10" stroke-linecap="round">
+    <line x1="100" y1="78" x2="100" y2="52" transform="rotate(0 100 95)"/>
+    <line x1="100" y1="78" x2="100" y2="52" transform="rotate(45 100 95)"/>
+    <line x1="100" y1="78" x2="100" y2="52" transform="rotate(90 100 95)"/>
+    <line x1="100" y1="78" x2="100" y2="52" transform="rotate(135 100 95)"/>
+    <line x1="100" y1="78" x2="100" y2="52" transform="rotate(180 100 95)"/>
+    <line x1="100" y1="78" x2="100" y2="52" transform="rotate(225 100 95)"/>
+    <line x1="100" y1="78" x2="100" y2="52" transform="rotate(270 100 95)"/>
+    <line x1="100" y1="78" x2="100" y2="52" transform="rotate(315 100 95)"/>
+  </g>
+
+  <!-- title + subtitle -->
+  <text x="60" y="205" font-family="Cantarell, sans-serif" font-size="40" font-weight="bold" fill="#EDE9E1">Claude Session Manager</text>
+  <text x="60" y="245" font-family="Cantarell, sans-serif" font-size="21" fill="#A89F93">A native Linux home for your Claude Code sessions</text>
+
+  <!-- prompt chip -->
+  <rect x="60" y="278" width="300" height="44" rx="10" fill="#15130F" stroke="#3b362f" stroke-width="1"/>
+  <text x="80" y="307" font-family="monospace" font-size="20" fill="#D97757">❯</text>
+  <text x="102" y="307" font-family="monospace" font-size="20" fill="#EDE9E1">claude --resume</text>
+  <rect x="296" y="290" width="12" height="22" fill="#EDE9E1" opacity="0.8"/>
+
+  <!-- badges -->
+  <g font-family="Cantarell, sans-serif" font-size="15" fill="#A89F93">
+    <rect x="60" y="346" width="150" height="30" rx="15" fill="none" stroke="#4a443c"/>
+    <text x="78" y="366">GTK4 + libadwaita</text>
+    <rect x="222" y="346" width="118" height="30" rx="15" fill="none" stroke="#4a443c"/>
+    <text x="240" y="366">VTE terminal</text>
+    <rect x="352" y="346" width="84" height="30" rx="15" fill="none" stroke="#4a443c"/>
+    <text x="370" y="366">Python</text>
+    <rect x="448" y="346" width="96" height="30" rx="15" fill="none" stroke="#4a443c"/>
+    <text x="466" y="366">GPL-3.0</text>
+  </g>
+
+  <!-- app window mockup -->
+  <g transform="translate(30 0)">
+    <rect x="620" y="70" width="330" height="290" rx="14" fill="#15130F" stroke="#4a443c" stroke-width="1.5"/>
+    <!-- header bar -->
+    <rect x="620" y="70" width="330" height="34" rx="14" fill="#211D19"/>
+    <rect x="620" y="90" width="330" height="14" fill="#211D19"/>
+    <rect x="760" y="84" width="50" height="7" rx="3.5" fill="#4a443c"/>
+    <circle cx="932" cy="87" r="5" fill="#3b362f"/>
+
+    <!-- sidebar -->
+    <rect x="620" y="104" width="118" height="256" fill="#1B1814"/>
+    <!-- group header 1 -->
+    <rect x="632" y="118" width="62" height="7" rx="3.5" fill="#6b6258"/>
+    <!-- guide line + rows -->
+    <rect x="638" y="134" width="2" height="64" fill="#3b362f"/>
+    <circle cx="652" cy="146" r="4" fill="#2ec27e"/>
+    <rect x="662" y="142" width="58" height="8" rx="4" fill="#9c948a"/>
+    <rect x="650" y="156" width="48" height="5" rx="2.5" fill="#4f483f"/>
+    <circle cx="652" cy="178" r="4" fill="#3584e4"/>
+    <rect x="662" y="174" width="44" height="8" rx="4" fill="#9c948a"/>
+    <rect x="650" y="188" width="56" height="5" rx="2.5" fill="#4f483f"/>
+    <!-- group header 2 -->
+    <rect x="632" y="212" width="48" height="7" rx="3.5" fill="#6b6258"/>
+    <rect x="638" y="228" width="2" height="62" fill="#3b362f"/>
+    <circle cx="652" cy="240" r="4" fill="#4f483f"/>
+    <rect x="662" y="236" width="52" height="8" rx="4" fill="#9c948a"/>
+    <rect x="650" y="250" width="40" height="5" rx="2.5" fill="#4f483f"/>
+    <circle cx="652" cy="272" r="4" fill="#4f483f"/>
+    <rect x="662" y="268" width="38" height="8" rx="4" fill="#9c948a"/>
+    <rect x="650" y="282" width="52" height="5" rx="2.5" fill="#4f483f"/>
+    <!-- group header 3 -->
+    <rect x="632" y="306" width="56" height="7" rx="3.5" fill="#6b6258"/>
+    <rect x="638" y="322" width="2" height="28" fill="#3b362f"/>
+    <circle cx="652" cy="334" r="4" fill="#4f483f"/>
+    <rect x="662" y="330" width="46" height="8" rx="4" fill="#9c948a"/>
+
+    <!-- tab bar -->
+    <rect x="746" y="112" width="74" height="22" rx="6" fill="#2a2620"/>
+    <rect x="754" y="121" width="40" height="6" rx="3" fill="#9c948a"/>
+    <rect x="826" y="112" width="74" height="22" rx="6" fill="#1B1814"/>
+    <rect x="834" y="121" width="40" height="6" rx="3" fill="#5a5248"/>
+
+    <!-- terminal content -->
+    <text x="754" y="166" font-family="monospace" font-size="13" fill="#D97757">❯</text>
+    <rect x="768" y="156" width="96" height="9" rx="4.5" fill="#7a7268"/>
+    <rect x="754" y="178" width="130" height="7" rx="3.5" fill="#4f483f"/>
+    <rect x="754" y="192" width="108" height="7" rx="3.5" fill="#4f483f"/>
+    <rect x="754" y="206" width="142" height="7" rx="3.5" fill="#4f483f"/>
+    <!-- coral mini asterisk as claude's spinner -->
+    <g stroke="#D97757" stroke-width="3" stroke-linecap="round">
+      <line x1="762" y1="238" x2="762" y2="230" transform="rotate(0 762 244)"/>
+      <line x1="762" y1="238" x2="762" y2="230" transform="rotate(90 762 244)"/>
+      <line x1="762" y1="238" x2="762" y2="230" transform="rotate(180 762 244)"/>
+      <line x1="762" y1="238" x2="762" y2="230" transform="rotate(270 762 244)"/>
+      <line x1="762" y1="238" x2="762" y2="230" transform="rotate(45 762 244)"/>
+      <line x1="762" y1="238" x2="762" y2="230" transform="rotate(135 762 244)"/>
+      <line x1="762" y1="238" x2="762" y2="230" transform="rotate(225 762 244)"/>
+      <line x1="762" y1="238" x2="762" y2="230" transform="rotate(315 762 244)"/>
+    </g>
+    <rect x="780" y="240" width="86" height="8" rx="4" fill="#7a7268"/>
+    <rect x="754" y="262" width="120" height="7" rx="3.5" fill="#4f483f"/>
+    <rect x="754" y="276" width="98" height="7" rx="3.5" fill="#4f483f"/>
+    <text x="754" y="318" font-family="monospace" font-size="13" fill="#D97757">❯</text>
+    <rect x="770" y="308" width="12" height="14" fill="#EDE9E1" opacity="0.8"/>
+  </g>
+</svg>
