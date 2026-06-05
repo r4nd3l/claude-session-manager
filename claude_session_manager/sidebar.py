@@ -73,7 +73,7 @@ class SessionRow(Gtk.ListBoxRow):
         box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
         box.set_margin_top(8)
         box.set_margin_bottom(8)
-        box.set_margin_start(12)
+        box.set_margin_start(26)  # indent under the group header
         box.set_margin_end(12)
 
         top = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
