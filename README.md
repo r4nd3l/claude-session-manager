@@ -1,5 +1,7 @@
 # Claude Session Manager
 
+[![CI](https://github.com/r4nd3l/claude-session-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/r4nd3l/claude-session-manager/actions/workflows/ci.yml)
+
 Native GTK4/libadwaita desktop app to manage [Claude Code](https://claude.com/claude-code) sessions.
 
 > **Unofficial community tool.** Not affiliated with or endorsed by Anthropic.

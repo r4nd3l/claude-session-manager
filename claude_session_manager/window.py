@@ -372,7 +372,8 @@ class MainWindow(Adw.ApplicationWindow):
                 "Manage and resume Claude Code sessions.\n\n"
                 "Unofficial community tool — not affiliated with or endorsed by Anthropic."
             ),
-            # TODO: set website/issue_url once the GitHub repository exists
+            website="https://github.com/r4nd3l/claude-session-manager",
+            issue_url="https://github.com/r4nd3l/claude-session-manager/issues",
         )
         about.present(self)
 

@@ -33,10 +33,9 @@
     <name>Máté Molnár</name>
   </developer>
 
-  <!-- TODO: set url tags once the GitHub repository exists
-  <url type="homepage">https://github.com/OWNER/claude-session-manager</url>
-  <url type="bugtracker">https://github.com/OWNER/claude-session-manager/issues</url>
-  -->
+  <url type="homepage">https://github.com/r4nd3l/claude-session-manager</url>
+  <url type="bugtracker">https://github.com/r4nd3l/claude-session-manager/issues</url>
+  <url type="vcs-browser">https://github.com/r4nd3l/claude-session-manager</url>
 
   <content_rating type="oars-1.1"/>
 
