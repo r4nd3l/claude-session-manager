@@ -290,14 +290,15 @@ class MainWindow(Adw.ApplicationWindow):
             self._close_confirmed(page)
             return
         self._closing_pages[page] = 0
-        tab.feed_child_text("/exit\n")
+        # Enter in a raw-mode TUI (claude) is carriage return, not newline.
+        tab.feed_child_text("/exit\r")
         GLib.timeout_add(300, self._poll_graceful, page, tab)
 
     def _poll_graceful(self, page: Adw.TabPage, tab: TerminalTab) -> bool:
         if page not in self._closing_pages:
             return GLib.SOURCE_REMOVE  # already closed
         if not tab.has_running_command():
-            tab.feed_child_text("exit\n")  # close the shell → child-exited closes the tab
+            tab.feed_child_text("exit\r")  # close the shell → child-exited closes the tab
             return GLib.SOURCE_REMOVE
         self._closing_pages[page] += 1
         if self._closing_pages[page] >= 40:  # ~12s safety net
