@@ -390,16 +390,9 @@ class MainWindow(Adw.ApplicationWindow):
             and page not in self._confirmed_closes
             and tab.has_running_command()
         ):
-            if page not in self._closing_pages:  # don't re-prompt while exiting
-                dialogs.confirm_dialog(
-                    self,
-                    "Close session?",
-                    f"Claude Code in “{page.get_title()}” will be asked to exit (/exit) "
-                    "before the tab closes.",
-                    "Close",
-                    lambda: self._graceful_close(page),
-                )
-            view.close_page_finish(page, False)  # keep the tab for now
+            if page not in self._closing_pages:  # start a graceful /exit in the background
+                self._graceful_close(page)
+            view.close_page_finish(page, False)  # keep the tab until it exits cleanly
             return True
         self._confirmed_closes.discard(page)
         self._closing_pages.pop(page, None)
