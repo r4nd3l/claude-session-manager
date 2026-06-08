@@ -59,7 +59,7 @@ Plus the [`claude` CLI](https://claude.com/claude-code) on your `PATH`.
 **Debian/Ubuntu — .deb package** (from the [latest release](https://github.com/r4nd3l/claude-session-manager/releases/latest)):
 
 ```bash
-sudo apt install ./claude-session-manager_0.1.0_all.deb
+sudo apt install ./claude-session-manager_0.2.0_all.deb
 ```
 
 Dependencies are pulled in automatically; the app appears in your app grid as "Claude Session Manager".

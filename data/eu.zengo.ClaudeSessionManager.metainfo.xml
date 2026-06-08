@@ -40,6 +40,17 @@
   <content_rating type="oars-1.1"/>
 
   <releases>
+    <release version="0.2.0" date="2026-06-08">
+      <description>
+        <p>Tab and workflow improvements.</p>
+        <ul>
+          <li>Renameable tabs and per-tab status dots</li>
+          <li>Toggleable sidebar with a status footer</li>
+          <li>Confirmation before closing a tab with a running command</li>
+          <li>Installable .deb package</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.1.0" date="2026-06-05">
       <description><p>Initial release.</p></description>
     </release>
