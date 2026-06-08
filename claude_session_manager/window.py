@@ -10,7 +10,7 @@ import gi
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Adw, Gio, GLib, Gtk  # noqa: E402
+from gi.repository import Adw, Gio, GLib, GObject, Gtk  # noqa: E402
 
 from . import __version__, dialogs
 from .models import SessionItem
@@ -22,6 +22,24 @@ from .store import SessionStore
 from .terminal import TerminalTab
 
 _GHOSTTY = shutil.which("ghostty")
+
+# Tab status dots, matching the sidebar (.status-dot CSS in app.py).
+_STATUS_COLORS = {"open": "#2ec27e", "attention": "#3584e4"}
+_status_icon_cache: dict[str, Gio.Icon] = {}
+
+
+def _status_icon(status: str) -> Gio.Icon | None:
+    if status not in _STATUS_COLORS:
+        return None
+    icon = _status_icon_cache.get(status)
+    if icon is None:
+        svg = (
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">'
+            f'<circle cx="8" cy="8" r="4" fill="{_STATUS_COLORS[status]}"/></svg>'
+        ).encode()
+        icon = Gio.BytesIcon.new(GLib.Bytes.new(svg))
+        _status_icon_cache[status] = icon
+    return icon
 
 
 class MainWindow(Adw.ApplicationWindow):
@@ -37,6 +55,7 @@ class MainWindow(Adw.ApplicationWindow):
         self.store = SessionStore(self.state)
         self._pages: dict[str, Adw.TabPage] = {}  # session_id -> open tab
         self._confirmed_closes: set[Adw.TabPage] = set()
+        self._menu_page: Adw.TabPage | None = None
 
         self._install_actions()
         self._install_shortcuts()
@@ -45,11 +64,21 @@ class MainWindow(Adw.ApplicationWindow):
         self.tab_view = Adw.TabView()
         self.tab_view.connect("close-page", self._on_close_page)
         self.tab_view.connect("notify::selected-page", self._on_selected_page_changed)
+        self.tab_view.connect("setup-menu", self._on_tab_setup_menu)
+
+        tab_menu = Gio.Menu()
+        tab_menu.append("Rename…", "win.rename-tab")
+        tab_menu.append("Close", "win.close-menu-tab")
+        self.tab_view.set_menu_model(tab_menu)
 
         tab_bar = Adw.TabBar(view=self.tab_view)
         tab_bar.set_autohide(False)
 
         content_header = Adw.HeaderBar()
+        self.sidebar_toggle = Gtk.ToggleButton(icon_name="sidebar-show-symbolic", active=True)
+        self.sidebar_toggle.set_tooltip_text("Toggle sidebar (F9)")
+        content_header.pack_start(self.sidebar_toggle)
+
         new_btn = Gtk.Button(icon_name="tab-new-symbolic")
         new_btn.set_tooltip_text("New Claude session… (Ctrl+Shift+T)")
         new_btn.set_action_name("win.new-session")
@@ -76,12 +105,19 @@ class MainWindow(Adw.ApplicationWindow):
         self.sidebar.connect("open-many", self._on_sidebar_open_many)
         self.sidebar.connect("trash-many", self._on_sidebar_trash_many)
 
-        split = Adw.OverlaySplitView()
-        split.set_sidebar(self.sidebar)
-        split.set_content(content_view)
-        split.set_min_sidebar_width(280)
-        split.set_max_sidebar_width(400)
-        self.set_content(split)
+        self.split = Adw.OverlaySplitView()
+        self.split.set_sidebar(self.sidebar)
+        self.split.set_content(content_view)
+        self.split.set_min_sidebar_width(280)
+        self.split.set_max_sidebar_width(400)
+        self.set_content(self.split)
+
+        self.split.bind_property(
+            "show-sidebar",
+            self.sidebar_toggle,
+            "active",
+            GObject.BindingFlags.BIDIRECTIONAL | GObject.BindingFlags.SYNC_CREATE,
+        )
 
         self.store.start()
 
@@ -97,6 +133,11 @@ class MainWindow(Adw.ApplicationWindow):
             "next-tab": lambda *_: self.tab_view.select_next_page(),
             "prev-tab": lambda *_: self.tab_view.select_previous_page(),
             "about": lambda *_: self._show_about(),
+            "rename-tab": lambda *_: self._rename_tab(),
+            "close-menu-tab": lambda *_: self._close_menu_tab(),
+            "toggle-sidebar": lambda *_: self.split.set_show_sidebar(
+                not self.split.get_show_sidebar()
+            ),
         }
         for name, callback in plain.items():
             action = Gio.SimpleAction(name=name)
@@ -136,6 +177,7 @@ class MainWindow(Adw.ApplicationWindow):
             ("<Control>Page_Down", "win.next-tab"),
             ("<Control>Page_Up", "win.prev-tab"),
             ("<Control>comma", "win.preferences"),
+            ("F9", "win.toggle-sidebar"),
         ):
             controller.add_shortcut(
                 Gtk.Shortcut.new(
@@ -218,8 +260,14 @@ class MainWindow(Adw.ApplicationWindow):
         tab.terminal.connect("contents-changed", self._on_terminal_output, page)
         self.tab_view.set_selected_page(page)
         self.content_stack.set_visible_child_name("tabs")
+        self._apply_tab_status(page)
         GLib.idle_add(tab.grab_terminal_focus)
         return page
+
+    def _apply_tab_status(self, page: Adw.TabPage) -> None:
+        """Mirror the sidebar status dot onto the tab itself."""
+        status = "attention" if page.get_needs_attention() else "open"
+        page.set_icon(_status_icon(status))
 
     def _close_current_tab(self) -> None:
         page = self.tab_view.get_selected_page()
@@ -250,6 +298,7 @@ class MainWindow(Adw.ApplicationWindow):
     def _on_terminal_output(self, _terminal, page: Adw.TabPage) -> None:
         if self.tab_view.get_selected_page() is not page and not page.get_needs_attention():
             page.set_needs_attention(True)
+            self._apply_tab_status(page)
             session_id = self._session_id_of(page)
             if session_id:
                 self._sync_status(session_id)
@@ -260,11 +309,41 @@ class MainWindow(Adw.ApplicationWindow):
             return
         if page.get_needs_attention():
             page.set_needs_attention(False)
+            self._apply_tab_status(page)
             session_id = self._session_id_of(page)
             if session_id:
                 self._sync_status(session_id)
         if isinstance(page.get_child(), TerminalTab):
             GLib.idle_add(page.get_child().grab_terminal_focus)
+
+    # -- tab rename / menu ---------------------------------------------------
+
+    def _on_tab_setup_menu(self, _view: Adw.TabView, page: Adw.TabPage | None) -> None:
+        if page is not None:
+            self._menu_page = page
+
+    def _rename_tab(self) -> None:
+        page = self._menu_page or self.tab_view.get_selected_page()
+        if page is None:
+            return
+        session_id = self._session_id_of(page)
+        if session_id:  # real session tab → rename the session (syncs sidebar)
+            session = self.store.get_session(session_id)
+            if session is not None:
+                self._prompt_rename_session(session)
+            return
+        # fork / new-session tab → local title rename only
+        dialogs.rename_dialog(
+            self,
+            "Tab name",
+            page.get_title(),
+            lambda name: page.set_title(name.strip() or page.get_title()),
+        )
+
+    def _close_menu_tab(self) -> None:
+        page = self._menu_page or self.tab_view.get_selected_page()
+        if page is not None:
+            self.tab_view.close_page(page)
 
     def _on_process_exited(self, _tab: TerminalTab, _status: int, page: Adw.TabPage) -> None:
         self.tab_view.close_page(page)
@@ -323,9 +402,10 @@ class MainWindow(Adw.ApplicationWindow):
 
     def _on_rename_action(self, _action, param: GLib.Variant) -> None:
         session = self._session_for(param)
-        if session is None:
-            return
+        if session is not None:
+            self._prompt_rename_session(session)
 
+    def _prompt_rename_session(self, session: Session) -> None:
         def save(name: str) -> None:
             self.store.rename(session.session_id, name)
             page = self._pages.get(session.session_id)
