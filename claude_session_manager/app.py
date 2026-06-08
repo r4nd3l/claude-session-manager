@@ -32,13 +32,18 @@ _CSS = b"""
   font-size: 0.8em;
 }
 
-/* children connect to their group via a left guide line */
+/* children connect to their group via a left guide line, on a faint card */
 row.session-child {
   margin-left: 20px;
+  margin-right: 16px;
+  background-color: alpha(currentColor, 0.06);
   border-left: 2px solid alpha(currentColor, 0.15);
   border-radius: 0 8px 8px 0;
 }
-row.session-child:hover { border-left-color: alpha(currentColor, 0.3); }
+row.session-child:hover {
+  background-color: alpha(currentColor, 0.1);
+  border-left-color: alpha(currentColor, 0.3);
+}
 """
 
 
