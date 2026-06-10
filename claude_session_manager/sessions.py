@@ -17,6 +17,7 @@ PEEK_MESSAGES = 12
 CLAUDE_PROJECTS_DIR = Path(
     os.environ.get("CSM_PROJECTS_DIR") or Path.home() / ".claude" / "projects"
 )
+CLAUDE_CONFIG = Path(os.environ.get("CSM_CLAUDE_CONFIG") or Path.home() / ".claude.json")
 
 # Session transcripts are named <uuid>.jsonl; skip anything else (agent files, etc.)
 _UUID_RE = re.compile(
@@ -138,6 +139,8 @@ class SessionDetails:
     file_size: int = 0
     # Recent (role, text) messages, oldest first, for the transcript peek.
     messages: list[tuple[str, str]] = field(default_factory=list)
+    # MCP server name -> number of tool calls in this session.
+    mcp_tools: dict[str, int] = field(default_factory=dict)
 
 
 def parse_details(path: Path) -> SessionDetails:
@@ -181,9 +184,17 @@ def parse_details(path: Path) -> SessionDetails:
                     details.output_tokens += usage.get("output_tokens") or 0
                     details.cache_read_tokens += usage.get("cache_read_input_tokens") or 0
                     if isinstance(content, list):
-                        details.tool_calls += sum(
-                            1 for b in content if isinstance(b, dict) and b.get("type") == "tool_use"
-                        )
+                        for b in content:
+                            if not (isinstance(b, dict) and b.get("type") == "tool_use"):
+                                continue
+                            details.tool_calls += 1
+                            name = b.get("name")
+                            # MCP tools are named mcp__<server>__<tool>
+                            if isinstance(name, str) and name.startswith("mcp__"):
+                                parts = name.split("__")
+                                if len(parts) >= 2 and parts[1]:
+                                    server = parts[1]
+                                    details.mcp_tools[server] = details.mcp_tools.get(server, 0) + 1
                     text = _extract_text(content).strip()
                     if text:
                         recent.append(("assistant", " ".join(text.split())[:500]))
@@ -192,3 +203,24 @@ def parse_details(path: Path) -> SessionDetails:
     details.models = sorted(models)
     details.messages = list(recent)
     return details
+
+
+def configured_mcp_servers(cwd: str | None) -> list[str]:
+    """MCP servers available to a session: global servers from ~/.claude.json
+    plus any configured for the session's project directory. Read-only."""
+    try:
+        data = json.loads(CLAUDE_CONFIG.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    if not isinstance(data, dict):
+        return []
+    servers: set[str] = set()
+    global_servers = data.get("mcpServers")
+    if isinstance(global_servers, dict):
+        servers.update(global_servers)
+    projects = data.get("projects")
+    if cwd and isinstance(projects, dict):
+        project = projects.get(cwd)
+        if isinstance(project, dict) and isinstance(project.get("mcpServers"), dict):
+            servers.update(project["mcpServers"])
+    return sorted(servers)

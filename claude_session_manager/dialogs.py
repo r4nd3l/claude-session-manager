@@ -12,7 +12,7 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, GLib, Gtk  # noqa: E402
 
 from .formatting import format_size, format_timestamp, format_tokens
-from .sessions import Session, SessionDetails, parse_details
+from .sessions import Session, SessionDetails, configured_mcp_servers, parse_details
 
 
 def rename_dialog(parent: Gtk.Widget, body: str, current: str, on_save: Callable[[str], None]) -> None:
@@ -102,7 +102,7 @@ def details_dialog(parent: Gtk.Widget, session: Session, title: str) -> None:
     dialog.set_child(view)
     dialog.present(parent)
 
-    def populate(details: SessionDetails) -> bool:
+    def populate(details: SessionDetails, mcp_servers: list[str]) -> bool:
         page.remove(group)
         info = Adw.PreferencesGroup()
 
@@ -127,6 +127,23 @@ def details_dialog(parent: Gtk.Widget, session: Session, title: str) -> None:
         add("Transcript size", format_size(details.file_size))
         page.add(info)
 
+        if mcp_servers or details.mcp_tools:
+            mcp = Adw.PreferencesGroup(title="MCP")
+
+            def mcp_row(row_title: str, value: str) -> None:
+                row = Adw.ActionRow(title=row_title, subtitle=value)
+                row.set_property("subtitle-lines", 0)
+                row.add_css_class("property")
+                mcp.add(row)
+
+            mcp_row("Available to this project", ", ".join(mcp_servers) or "—")
+            used = " · ".join(
+                f"{server}: {count}"
+                for server, count in sorted(details.mcp_tools.items(), key=lambda kv: -kv[1])
+            )
+            mcp_row("Tools used in this session", used or "—")
+            page.add(mcp)
+
         if details.messages:
             recent = Adw.PreferencesGroup(title="Recent activity")
             for role, text in details.messages:
@@ -142,6 +159,7 @@ def details_dialog(parent: Gtk.Widget, session: Session, title: str) -> None:
 
     def work() -> None:
         details = parse_details(session.jsonl_path)
-        GLib.idle_add(populate, details)
+        mcp_servers = configured_mcp_servers(session.cwd)
+        GLib.idle_add(populate, details, mcp_servers)
 
     threading.Thread(target=work, daemon=True).start()

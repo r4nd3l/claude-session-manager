@@ -1,4 +1,10 @@
-from claude_session_manager.sessions import discover_sessions, parse_details
+import json
+
+from claude_session_manager.sessions import (
+    configured_mcp_servers,
+    discover_sessions,
+    parse_details,
+)
 
 
 def test_discover_finds_only_real_sessions(projects_dir):
@@ -47,6 +53,52 @@ def test_parse_details_collects_recent_messages(projects_dir):
     assert ("user", "Build the alpha feature") in details.messages
     assert ("assistant", "Hello!") in details.messages
     assert all(role in ("user", "assistant") for role, _ in details.messages)
+
+
+def test_parse_details_counts_mcp_tools(tmp_path):
+    entry = {
+        "type": "assistant",
+        "message": {
+            "role": "assistant",
+            "model": "claude-opus-4-8",
+            "content": [
+                {"type": "tool_use", "id": "1", "name": "mcp__gitlab__get_issue", "input": {}},
+                {"type": "tool_use", "id": "2", "name": "mcp__gitlab__list_issues", "input": {}},
+                {"type": "tool_use", "id": "3", "name": "Bash", "input": {}},
+            ],
+        },
+    }
+    path = tmp_path / "s.jsonl"
+    path.write_text(json.dumps(entry), encoding="utf-8")
+    details = parse_details(path)
+    assert details.mcp_tools == {"gitlab": 2}
+    assert details.tool_calls == 3
+
+
+def test_configured_mcp_servers(monkeypatch, tmp_path):
+    import claude_session_manager.sessions as sessions_mod
+
+    config = tmp_path / "claude.json"
+    config.write_text(
+        json.dumps(
+            {
+                "mcpServers": {"gitlab": {}, "playwright": {}},
+                "projects": {"/home/u/proj": {"mcpServers": {"local-thing": {}}}},
+            }
+        ),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(sessions_mod, "CLAUDE_CONFIG", config)
+    assert configured_mcp_servers("/home/u/proj") == ["gitlab", "local-thing", "playwright"]
+    assert configured_mcp_servers("/unknown") == ["gitlab", "playwright"]
+    assert configured_mcp_servers(None) == ["gitlab", "playwright"]
+
+
+def test_configured_mcp_servers_missing_file(monkeypatch, tmp_path):
+    import claude_session_manager.sessions as sessions_mod
+
+    monkeypatch.setattr(sessions_mod, "CLAUDE_CONFIG", tmp_path / "nope.json")
+    assert configured_mcp_servers("/whatever") == []
 
 
 def test_parse_details_handles_garbage(tmp_path):
