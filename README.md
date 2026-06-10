@@ -106,7 +106,15 @@ scripts/
 └── make_demo_data.py                       # fake sessions for screenshots/demos
 ```
 
+## Publishing (maintainers)
+
+Publishing a GitHub Release triggers `.github/workflows/publish-pypi.yml`, which
+builds the package and uploads it to [PyPI](https://pypi.org/project/claude-session-manager/)
+via **trusted publishing** (OIDC — no API tokens). One-time setup on PyPI:
+add a *Trusted Publisher* for the project with owner `r4nd3l`, repository
+`claude-session-manager`, and workflow `publish-pypi.yml`.
+
 ## Roadmap
 
-- Transcript peek: render last messages in the details dialog
-- Drag-and-drop sessions into Favorites
+- Distribution: AUR, Ubuntu PPA, Flathub
+- Optional: terminal color themes, "watch a project", i18n
