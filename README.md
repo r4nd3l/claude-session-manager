@@ -4,6 +4,8 @@
 
 Native GTK4/libadwaita desktop app to manage [Claude Code](https://claude.com/claude-code) sessions.
 
+📖 **[Documentation](https://r4nd3l.github.io/claude-session-manager/)**
+
 > **Unofficial community tool.** Not affiliated with or endorsed by Anthropic.
 > It never modifies Claude Code's own data — all app state lives in its own config file.
 
