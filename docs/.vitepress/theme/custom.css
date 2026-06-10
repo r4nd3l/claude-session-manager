@@ -1,0 +1,41 @@
+/* Brand accent */
+:root {
+  --vp-c-brand-1: #c2410c;
+  --vp-c-brand-2: #d97757;
+  --vp-c-brand-3: #d97757;
+}
+.dark {
+  --vp-c-brand-1: #e8927c;
+  --vp-c-brand-2: #d97757;
+  --vp-c-brand-3: #d97757;
+}
+
+/* Let the hero screenshot render large instead of being boxed into the
+   small default logo slot. */
+.VPHero .image {
+  max-width: none;
+}
+.VPHero .image-bg {
+  display: none;
+}
+.VPHero .image-container {
+  position: relative;
+  transform: none;
+  width: auto;
+  height: auto;
+  padding: 0;
+}
+.VPHero .image-container .VPImage {
+  max-width: 580px;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: 0 16px 48px -24px rgba(0, 0, 0, 0.6);
+}
+
+@media (min-width: 960px) {
+  .VPHero.has-image .container {
+    align-items: center;
+  }
+}
