@@ -40,6 +40,16 @@
   <content_rating type="oars-1.1"/>
 
   <releases>
+    <release version="0.4.0" date="2026-06-09">
+      <description>
+        <p>Tab usability improvements.</p>
+        <ul>
+          <li>Set a per-tab emoji prefix from the tab menu</li>
+          <li>Shift+Enter inserts a newline in Claude's prompt</li>
+          <li>Clearer active-tab styling and a close-all-tabs button</li>
+        </ul>
+      </description>
+    </release>
     <release version="0.3.0" date="2026-06-08">
       <description>
         <p>Search, graceful close, and sidebar polish.</p>
