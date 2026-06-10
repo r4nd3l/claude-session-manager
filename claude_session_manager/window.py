@@ -51,7 +51,7 @@ class MainWindow(Adw.ApplicationWindow):
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.set_title("Claude Session Manager")
-        self.set_icon_name("eu.zengo.ClaudeSessionManager")
+        self.set_icon_name("io.github.r4nd3l.ClaudeSessionManager")
         self.set_default_size(1280, 800)
 
         self.state = AppState()
@@ -666,7 +666,7 @@ class MainWindow(Adw.ApplicationWindow):
     def _show_about(self) -> None:
         about = Adw.AboutDialog(
             application_name="Claude Session Manager",
-            application_icon="eu.zengo.ClaudeSessionManager",
+            application_icon="io.github.r4nd3l.ClaudeSessionManager",
             developer_name="Máté Molnár",
             version=__version__,
             license_type=Gtk.License.GPL_3_0,

@@ -60,10 +60,13 @@ row.session-child:hover {
 """
 
 
+APP_ID = "io.github.r4nd3l.ClaudeSessionManager"
+
+
 class App(Adw.Application):
     def __init__(self) -> None:
         # CSM_APP_ID lets a demo instance run alongside the real one (for screenshots).
-        super().__init__(application_id=os.environ.get("CSM_APP_ID") or "eu.zengo.ClaudeSessionManager")
+        super().__init__(application_id=os.environ.get("CSM_APP_ID") or APP_ID)
 
     def do_startup(self) -> None:
         Adw.Application.do_startup(self)

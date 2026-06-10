@@ -4,7 +4,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PKG="claude-session-manager"
-APP_ID="eu.zengo.ClaudeSessionManager"
+APP_ID="io.github.r4nd3l.ClaudeSessionManager"
 VERSION="$(grep -m1 '^version' "$ROOT/pyproject.toml" | cut -d'"' -f2)"
 BUILD="$ROOT/dist/deb-build"
 

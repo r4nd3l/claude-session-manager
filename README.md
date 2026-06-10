@@ -98,8 +98,8 @@ claude_session_manager/
 ├── prefs.py      # preferences dialog
 └── terminal.py   # VTE terminal tab spawning the claude CLI
 data/
-├── eu.zengo.ClaudeSessionManager.desktop   # launcher template
-├── icons/eu.zengo.ClaudeSessionManager.svg # app icon
+├── io.github.r4nd3l.ClaudeSessionManager.desktop   # launcher template
+├── icons/io.github.r4nd3l.ClaudeSessionManager.svg # app icon
 └── install.sh                              # install launcher + icon for current user
 scripts/
 ├── build_deb.sh                            # build the .deb package into dist/
