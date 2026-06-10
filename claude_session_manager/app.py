@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 
@@ -61,7 +62,8 @@ row.session-child:hover {
 
 class App(Adw.Application):
     def __init__(self) -> None:
-        super().__init__(application_id="eu.zengo.ClaudeSessionManager")
+        # CSM_APP_ID lets a demo instance run alongside the real one (for screenshots).
+        super().__init__(application_id=os.environ.get("CSM_APP_ID") or "eu.zengo.ClaudeSessionManager")
 
     def do_startup(self) -> None:
         Adw.Application.do_startup(self)

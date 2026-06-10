@@ -61,3 +61,5 @@ On first launch the sidebar lists every session found under
 session, and it opens in a terminal tab running `claude --resume`. If you
 haven't used Claude Code yet, run `claude` in a project once and the session
 will show up automatically.
+
+![The main window on first run](/img/main-window.png)

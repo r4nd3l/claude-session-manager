@@ -15,11 +15,26 @@
 - **Status dots**: green = open in a tab, blue = produced output while in the
   background.
 
+![Sidebar with the Favorites section expanded](/img/sidebar-favorites.png)
+
+The search box filters the whole list as you type:
+
+![Filtering sessions with the search box](/img/sidebar-search.png)
+
+### Quick switcher
+
+Press `Ctrl+Shift+K` anywhere to fuzzy-jump to a session — arrow keys move,
+Enter opens, Esc closes.
+
+![Quick switcher](/img/quick-switcher.png)
+
 ## Custom names, favorites & emoji
 
 - Give any session a **custom name** (pencil icon).
 - **Star** sessions to pin them to Favorites.
 - Add an **emoji** prefix to a tab (right-click a tab → *Set emoji…*).
+
+![Setting a tab emoji, with two sessions open as tabs](/img/tab-emoji.png)
 
 All of this is stored in `~/.config/claude-session-manager/state.json`. Claude
 Code's own session files are never modified.
@@ -50,8 +65,13 @@ Code's own session files are never modified.
   activity** peek of the last messages, so you can identify a session without
   resuming it. It also lists the **MCP servers** available to the project and
   which ones the session actually used.
+
+![Session details dialog](/img/session-details.png)
+
 - **MCP servers browser** (menu → *MCP servers*): a read-only view of every MCP
   server configured in `~/.claude.json`, global and per-project.
+
+![MCP servers browser](/img/mcp-servers.png)
 
 ## Bulk actions & housekeeping
 
@@ -67,3 +87,5 @@ Code's own session files are never modified.
 
 Terminal **font**, **scrollback** size, **color scheme** (system / light /
 dark), and the idle-notification toggle — reachable from the menu or `Ctrl+,`.
+
+![Preferences dialog](/img/preferences.png)

@@ -3,7 +3,9 @@
 
 Usage:
     python3 scripts/make_demo_data.py
-    XDG_CONFIG_HOME=/tmp/csm-demo/config CSM_PROJECTS_DIR=/tmp/csm-demo/projects \\
+    XDG_CONFIG_HOME=/tmp/csm-demo/config \\
+        CSM_PROJECTS_DIR=/tmp/csm-demo/projects \\
+        CSM_CLAUDE_CONFIG=/tmp/csm-demo/claude.json \\
         python3 -m claude_session_manager
 """
 
@@ -17,24 +19,44 @@ from pathlib import Path
 
 ROOT = Path("/tmp/csm-demo")
 
-# (project, preview prompt, age in seconds, custom name or None, favorite)
+# (project, preview prompt, age, custom name|None, favorite, emoji|None, mcp server used|None)
 SESSIONS = [
     ("portfolio-website", "Redesign the hero section with a dark theme and subtle animations",
-     300, "Homepage redesign", True),
+     300, "Homepage redesign", True, "🎨", None),
     ("portfolio-website", "Fix the contact form validation, emails with a plus sign are rejected",
-     7200, None, False),
-    ("todo-api", "Add JWT authentication to the API with refresh tokens", 5400, "JWT auth", True),
-    ("todo-api", "Write integration tests for the todo endpoints", 86400, None, False),
-    ("dotfiles", "Migrate my neovim configuration from vimscript to lua", 172800, None, False),
+     7200, None, False, None, None),
+    ("todo-api", "Add JWT authentication to the API with refresh tokens",
+     5400, "JWT auth", True, "🔐", "postgres"),
+    ("todo-api", "Write integration tests for the todo endpoints", 86400, None, False, None, None),
+    ("dotfiles", "Migrate my neovim configuration from vimscript to lua",
+     172800, None, False, None, None),
     ("snake-game", "Build a snake game in pygame with a persistent high score list",
-     259200, "Snake 🐍", False),
-    ("data-pipeline", "Optimize the CSV import, it is too slow on files over 1GB", 518400, None, False),
+     259200, "Snake", False, "🐍", None),
+    ("data-pipeline", "Optimize the CSV import, it is too slow on files over 1GB",
+     518400, None, False, None, "linear"),
 ]
 
+# Fake MCP servers, so the MCP browser and details show realistic-but-fake data.
+MCP_GLOBAL = {
+    "github": {"type": "stdio", "command": "npx", "args": ["-y", "@modelcontextprotocol/server-github"]},
+    "linear": {"type": "http", "url": "https://mcp.linear.app/sse"},
+    "filesystem": {"type": "stdio", "command": "npx", "args": ["-y", "@modelcontextprotocol/server-filesystem"]},
+}
+MCP_PER_PROJECT = {
+    "/home/demo/projects/todo-api": {
+        "postgres": {"type": "stdio", "command": "npx", "args": ["-y", "@modelcontextprotocol/server-postgres"]},
+    },
+}
 
-def make_transcript(cwd: str, prompt: str, timestamp: float) -> tuple[str, str]:
+
+def make_transcript(cwd: str, prompt: str, timestamp: float, mcp_server: str | None) -> tuple[str, str]:
     iso = time.strftime("%Y-%m-%dT%H:%M:%S.000Z", time.gmtime(timestamp))
     session_id = str(uuid.uuid4())
+    content = [{"type": "text", "text": "On it — here's the plan, then I'll start."}]
+    if mcp_server:
+        content.append(
+            {"type": "tool_use", "id": "t1", "name": f"mcp__{mcp_server}__query", "input": {}}
+        )
     lines = [
         {"type": "mode", "sessionId": session_id},
         {
@@ -52,7 +74,7 @@ def make_transcript(cwd: str, prompt: str, timestamp: float) -> tuple[str, str]:
             "message": {
                 "role": "assistant",
                 "model": "claude-opus-4-8",
-                "content": [{"type": "text", "text": "On it."}],
+                "content": content,
                 "usage": {"input_tokens": 1200, "output_tokens": 400, "cache_read_input_tokens": 9000},
             },
         },
@@ -67,25 +89,36 @@ def main() -> None:
     config_dir.mkdir(parents=True, exist_ok=True)
 
     names: dict[str, str] = {}
+    emojis: dict[str, str] = {}
     favorites: list[str] = []
     now = time.time()
 
-    for project, prompt, age, custom_name, favorite in SESSIONS:
+    for project, prompt, age, custom_name, favorite, emoji, mcp_server in SESSIONS:
         cwd = f"/home/demo/projects/{project}"
         project_dir = projects_dir / cwd.replace("/", "-")
         project_dir.mkdir(exist_ok=True)
         mtime = now - age
-        session_id, content = make_transcript(cwd, prompt, mtime)
+        session_id, content = make_transcript(cwd, prompt, mtime, mcp_server)
         path = project_dir / f"{session_id}.jsonl"
         path.write_text(content, encoding="utf-8")
         os.utime(path, (mtime, mtime))
         if custom_name:
             names[session_id] = custom_name
+        if emoji:
+            emojis[session_id] = emoji
         if favorite:
             favorites.append(session_id)
 
     (config_dir / "state.json").write_text(
-        json.dumps({"names": names, "favorites": favorites, "hidden": [], "settings": {}}, indent=2),
+        json.dumps(
+            {"names": names, "emojis": emojis, "favorites": favorites, "hidden": [], "settings": {}},
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    (ROOT / "claude.json").write_text(
+        json.dumps({"mcpServers": MCP_GLOBAL, "projects": MCP_PER_PROJECT}, indent=2),
         encoding="utf-8",
     )
 
@@ -93,7 +126,7 @@ def main() -> None:
     print("Launch with:")
     print(
         f"  XDG_CONFIG_HOME={ROOT}/config CSM_PROJECTS_DIR={ROOT}/projects "
-        "python3 -m claude_session_manager"
+        f"CSM_CLAUDE_CONFIG={ROOT}/claude.json python3 -m claude_session_manager"
     )
 
 
