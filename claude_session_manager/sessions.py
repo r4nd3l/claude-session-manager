@@ -98,8 +98,9 @@ _TAIL_BYTES = 64 * 1024
 def _tail_state(path: Path) -> str:
     """Cheaply read the transcript's tail to classify its state.
 
-    Returns "waiting" when Claude's last message was a question with no user
-    reply after it — i.e. the session is waiting on you. Otherwise "".
+    - "waiting": Claude's last message was a question with no user reply after.
+    - "interrupted": the last event was the user stopping Claude mid-task.
+    - "" otherwise.
     """
     try:
         size = path.stat().st_size
@@ -110,7 +111,7 @@ def _tail_state(path: Path) -> str:
     except OSError:
         return ""
 
-    latest_role: str | None = None
+    latest: str | None = None  # "assistant", "user", or "interrupted"
     latest_assistant_text = ""
     for line in blob.splitlines():
         try:
@@ -122,13 +123,17 @@ def _tail_state(path: Path) -> str:
         text = _extract_text((entry.get("message") or {}).get("content")).strip()
         if not text:
             continue
-        if entry.get("type") == "assistant":
-            latest_role = "assistant"
+        if "[Request interrupted by user" in text:
+            latest = "interrupted"
+        elif entry.get("type") == "assistant":
+            latest = "assistant"
             latest_assistant_text = text
         elif entry.get("type") == "user" and not text.startswith("<"):
-            latest_role = "user"  # a real user reply, not a tool result / command
+            latest = "user"  # a real user reply, not a tool result / command
 
-    if latest_role == "assistant" and latest_assistant_text.rstrip().endswith("?"):
+    if latest == "interrupted":
+        return "interrupted"
+    if latest == "assistant" and latest_assistant_text.rstrip().endswith("?"):
         return "waiting"
     return ""
 

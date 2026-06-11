@@ -96,10 +96,8 @@ class SessionRow(Gtk.ListBoxRow):
         name_label.add_css_class("heading")
         top.append(name_label)
 
-        waiting = Gtk.Image(icon_name="dialog-question-symbolic", valign=Gtk.Align.CENTER)
-        waiting.add_css_class("waiting-badge")
-        waiting.set_tooltip_text(_("Claude is waiting for your reply"))
-        top.append(waiting)
+        self._state_badge = Gtk.Image(valign=Gtk.Align.CENTER)
+        top.append(self._state_badge)
 
         star = Gtk.Button(valign=Gtk.Align.CENTER)
         star.add_css_class("flat")
@@ -149,11 +147,13 @@ class SessionRow(Gtk.ListBoxRow):
             "favorite", star, "tooltip-text", flags,
             lambda _b, fav: _("Remove from favorites") if fav else _("Add to favorites"),
         )
-        item.bind_property("waiting", waiting, "visible", flags)
 
-        # Status dot needs CSS-class updates: plain signal, detached on unroot.
+        # Status dot + state badge need CSS-class updates: plain signals,
+        # detached on unroot.
         self._status_handler = item.connect("notify::status", self._on_status_changed)
+        self._state_handler = item.connect("notify::state", self._on_state_changed)
         self._on_status_changed(item, None)
+        self._on_state_changed(item, None)
 
         right_click = Gtk.GestureClick(button=3)
         right_click.connect("pressed", self._on_right_click)
@@ -163,6 +163,9 @@ class SessionRow(Gtk.ListBoxRow):
         if self._status_handler is not None:
             self.item.disconnect(self._status_handler)
             self._status_handler = None
+        if self._state_handler is not None:
+            self.item.disconnect(self._state_handler)
+            self._state_handler = None
         Gtk.ListBoxRow.do_unroot(self)
 
     def _on_status_changed(self, item: SessionItem, _pspec) -> None:
@@ -170,6 +173,23 @@ class SessionRow(Gtk.ListBoxRow):
             self.dot.remove_css_class(css)
         if item.status:
             self.dot.add_css_class(item.status)
+
+    def _on_state_changed(self, item: SessionItem, _pspec) -> None:
+        badge = self._state_badge
+        for css in ("waiting-badge", "interrupted-badge"):
+            badge.remove_css_class(css)
+        if item.state == "waiting":
+            badge.set_from_icon_name("dialog-question-symbolic")
+            badge.add_css_class("waiting-badge")
+            badge.set_tooltip_text(_("Claude is waiting for your reply"))
+            badge.set_visible(True)
+        elif item.state == "interrupted":
+            badge.set_from_icon_name("process-stop-symbolic")
+            badge.add_css_class("interrupted-badge")
+            badge.set_tooltip_text(_("You interrupted Claude here"))
+            badge.set_visible(True)
+        else:
+            badge.set_visible(False)
 
     def _on_right_click(self, _gesture, _n_press: int, x: float, y: float) -> None:
         self._sidebar.show_row_menu(self, x, y)

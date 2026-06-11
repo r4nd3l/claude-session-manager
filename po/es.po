@@ -322,6 +322,9 @@ msgstr "Mover a la papelera"
 msgid "New window"
 msgstr "Nueva ventana"
 
+msgid "You interrupted Claude here"
+msgstr "Interrumpiste a Claude aquí"
+
 msgid "Restart now"
 msgstr "Reiniciar ahora"
 

@@ -168,6 +168,25 @@ def test_tail_state_waiting(monkeypatch, tmp_path):
     assert states[done_id] == ""
 
 
+def test_tail_state_interrupted(monkeypatch, tmp_path):
+    import claude_session_manager.sessions as sessions_mod
+
+    root = tmp_path / "projects" / "-home-u-proj"
+    root.mkdir(parents=True)
+    monkeypatch.setattr(sessions_mod, "CLAUDE_PROJECTS_DIR", tmp_path / "projects")
+    sid = "44444444-4444-4444-4444-444444444444"
+    lines = [
+        {"type": "assistant", "message": {"content": [{"type": "text", "text": "Working on it…"}]}},
+        {"type": "user", "cwd": "/home/u/proj",
+         "message": {"content": "[Request interrupted by user]"}},
+    ]
+    (root / f"{sid}.jsonl").write_text(
+        "\n".join(json.dumps(line) for line in lines), encoding="utf-8"
+    )
+    state = next(s.state for s in sessions_mod.discover_sessions() if s.session_id == sid)
+    assert state == "interrupted"
+
+
 def test_tail_state_user_replied_after_question(monkeypatch, tmp_path):
     import claude_session_manager.sessions as sessions_mod
 

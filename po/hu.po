@@ -322,6 +322,9 @@ msgstr "Kukába"
 msgid "New window"
 msgstr "Új ablak"
 
+msgid "You interrupted Claude here"
+msgstr "Itt szakítottad meg a Claude-ot"
+
 msgid "Restart now"
 msgstr "Újraindítás most"
 

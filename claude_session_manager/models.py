@@ -19,8 +19,8 @@ class SessionItem(GObject.Object):
     subtitle = GObject.Property(type=str, default="")
     preview = GObject.Property(type=str, default="")
     favorite = GObject.Property(type=bool, default=False)
-    status = GObject.Property(type=str, default="")  # "", "open", "attention"
-    waiting = GObject.Property(type=bool, default=False)  # Claude awaiting your reply
+    status = GObject.Property(type=str, default="")  # "", "open", "attention" (tab state)
+    state = GObject.Property(type=str, default="")  # "", "waiting", "interrupted" (transcript)
 
     def __init__(self, session: Session) -> None:
         super().__init__()

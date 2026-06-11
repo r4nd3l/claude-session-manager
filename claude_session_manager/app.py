@@ -33,8 +33,9 @@ _CSS = b"""
 
 .group-header { padding: 10px 10px 4px 10px; }
 
-/* "Claude is waiting for your reply" badge on a session row */
-.waiting-badge { color: #e5a50a; }
+/* session-row state badges */
+.waiting-badge { color: #e5a50a; }      /* Claude asked a question */
+.interrupted-badge { color: #e01b24; }  /* user stopped Claude mid-task */
 
 /* make the active tab clearly stand out from inactive ones */
 tabbar tab:checked {

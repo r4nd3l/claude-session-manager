@@ -322,6 +322,9 @@ msgstr "Mettre à la corbeille"
 msgid "New window"
 msgstr "Nouvelle fenêtre"
 
+msgid "You interrupted Claude here"
+msgstr "Vous avez interrompu Claude ici"
+
 msgid "Restart now"
 msgstr "Redémarrer maintenant"
 
