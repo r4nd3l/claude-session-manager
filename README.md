@@ -122,11 +122,20 @@ scripts/
 
 ## Publishing (maintainers)
 
-Publishing a GitHub Release triggers `.github/workflows/publish-pypi.yml`, which
-builds the package and uploads it to [PyPI](https://pypi.org/project/claude-session-manager-gtk/)
-via **trusted publishing** (OIDC — no API tokens). One-time setup on PyPI:
-add a *Trusted Publisher* for the project with owner `r4nd3l`, repository
-`claude-session-manager`, and workflow `publish-pypi.yml`.
+Releases are one step: **push a `v*` tag**. `.github/workflows/release.yml` then
+builds the wheel/sdist and the `.deb`, creates the GitHub Release (with the
+`.deb` attached and auto-generated notes), and publishes to
+[PyPI](https://pypi.org/project/claude-session-manager-gtk/) via **trusted
+publishing** (OIDC — no API tokens).
+
+```bash
+# bump version in pyproject.toml / __init__.py / debian/changelog, commit, then:
+git tag -a v0.8.0 -m v0.8.0 && git push origin v0.8.0
+```
+
+PyPI trusted-publisher setup expects workflow `release.yml` (owner `r4nd3l`,
+repo `claude-session-manager`). The AUR and PPA are updated separately
+(see `packaging/`).
 
 ## Roadmap
 
