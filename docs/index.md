@@ -5,7 +5,7 @@ layout: home
 hero:
   name: "Agent Session Manager"
   text: "A native home for your AI coding-agent sessions"
-  tagline: Browse, name, and resume every agent session on your machine — in embedded terminal tabs. Supports Claude Code today, with more agents on the way.
+  tagline: Browse, name, and resume every agent session on your machine — in embedded terminal tabs. Supports Claude Code and Cursor, side by side.
   image:
     src: https://raw.githubusercontent.com/r4nd3l/agent-session-manager/main/data/screenshot.png
     alt: Agent Session Manager

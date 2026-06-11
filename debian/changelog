@@ -1,3 +1,12 @@
+agent-session-manager (0.10.0) noble; urgency=medium
+
+  * Multi-agent support: a provider framework now manages Cursor sessions
+    alongside Claude Code. The sidebar lists both, each row badged with its
+    agent icon; the New Session menu offers one entry per installed agent;
+    resume, close, and fork route through each session's own agent.
+
+ -- Máté Molnár <matemiller992@gmail.com>  Thu, 11 Jun 2026 19:52:07 +0200
+
 agent-session-manager (0.9.0) noble; urgency=medium
 
   * Rebrand: the app is now "Agent Session Manager" (project, repo, icon, and

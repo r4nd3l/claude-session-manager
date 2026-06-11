@@ -5,7 +5,7 @@
 [![AUR](https://img.shields.io/aur/version/agent-session-manager?label=AUR)](https://aur.archlinux.org/packages/agent-session-manager)
 [![Release](https://img.shields.io/github/v/release/r4nd3l/agent-session-manager?label=release)](https://github.com/r4nd3l/agent-session-manager/releases/latest)
 
-Native GTK4/libadwaita desktop app to browse, name, and resume your AI coding-agent sessions in embedded terminal tabs. Supports [Claude Code](https://claude.com/claude-code) today, with more agents (such as Cursor) on the way.
+Native GTK4/libadwaita desktop app to browse, name, and resume your AI coding-agent sessions in embedded terminal tabs. Supports [Claude Code](https://claude.com/claude-code) and [Cursor](https://cursor.com), side by side.
 
 📖 **[Documentation](https://r4nd3l.github.io/agent-session-manager/)**
 

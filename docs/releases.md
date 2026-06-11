@@ -15,16 +15,28 @@ downloads of each version, see the
 - ✅ **Theming** — light/dark plus selectable terminal color palettes
 - ✅ **Localization** — English, Hungarian, German, Spanish, French
 - ✅ **Multi-window**
+- ✅ **Multi-agent** — a provider framework managing Claude Code and Cursor side by side
 - ✅ **Distribution** — PyPI, AUR, Ubuntu PPA, `.deb`, one-step tag-driven releases
 
 ### Exploring next
 
-- 🔭 **Multi-LLM sessions** — manage more than just Claude Code in one place
-- 🔭 **Chat-style UI** — a sugar layer over the terminal that turns Claude's
+- 🔭 **More agents** — additional provider adapters beyond Claude Code and Cursor
+- 🔭 **Chat-style UI** — a sugar layer over the terminal that turns the agent's
   prompts into native cards, bubbles, and modals
 - 🔭 **Flathub** distribution
 
 ## Changelog
+
+### v0.10.0 — Multi-agent (Cursor)
+
+- **Provider framework**: session handling is now generalized behind per-agent
+  providers, so the app manages more than one AI coding agent.
+- **Cursor support**: Cursor sessions are discovered and resumed (`cursor-agent`)
+  right alongside Claude Code. One sidebar lists both, each row badged with its
+  agent icon.
+- **Per-agent New Session**: the New Session menu offers one entry per installed
+  agent. Resume, graceful close, and fork all route through each session's own
+  agent (Cursor force-closes; fork stays Claude-only).
 
 ### v0.9.0 — Rebrand to Agent Session Manager
 

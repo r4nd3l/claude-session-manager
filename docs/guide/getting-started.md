@@ -6,8 +6,9 @@ Agent Session Manager is a GTK4 app. You'll need:
 
 - **Python ≥ 3.10**
 - **GTK 4**, **libadwaita ≥ 1.5**, **VTE** (the GTK 4 build), and **PyGObject**
-- A supported agent's CLI on your `PATH` — currently the
-  [`claude` CLI](https://claude.com/claude-code)
+- At least one supported agent's CLI on your `PATH` — the
+  [`claude` CLI](https://claude.com/claude-code) and/or
+  [`cursor-agent`](https://cursor.com)
 
 Install the system libraries with your distro's package manager:
 
