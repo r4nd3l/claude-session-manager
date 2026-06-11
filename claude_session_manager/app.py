@@ -13,6 +13,9 @@ gi.require_version("Adw", "1")
 gi.require_version("Vte", "3.91")
 from gi.repository import Adw, Gdk, Gio, GLib, Gtk  # noqa: E402
 
+from .prefs import apply_color_scheme
+from .state import AppState
+from .store import SessionStore
 from .window import MainWindow
 
 # Bundled icons (e.g. tab-close-symbolic); found by name when installed.
@@ -82,9 +85,26 @@ class App(Adw.Application):
         if _BUNDLED_ICONS.is_dir():  # running from source; installed icons live in the system theme
             Gtk.IconTheme.get_for_display(display).add_search_path(str(_BUNDLED_ICONS))
 
+        # Shared across all windows so scans/monitors aren't duplicated and
+        # state.json writes don't race.
+        self.state = AppState()
+        apply_color_scheme(self.state.get_setting("color_scheme"))
+        self.store = SessionStore(self.state)
+        self.store.start()
+
         focus = Gio.SimpleAction.new("focus-session", GLib.VariantType("s"))
         focus.connect("activate", self._on_focus_session)
         self.add_action(focus)
+
+        new_window = Gio.SimpleAction.new("new-window", None)
+        new_window.connect("activate", lambda *_: self._new_window())
+        self.add_action(new_window)
+        self.set_accels_for_action("app.new-window", ["<Control><Shift>n"])
+
+    def _new_window(self) -> MainWindow:
+        window = MainWindow(application=self, state=self.state, store=self.store)
+        window.present()
+        return window
 
     def _on_focus_session(self, _action, param: GLib.Variant) -> None:
         window = self.get_active_window()
@@ -98,7 +118,7 @@ class App(Adw.Application):
     def do_activate(self) -> None:
         window = self.get_active_window()
         if window is None:
-            window = MainWindow(application=self)
+            window = self._new_window()
         window.present()
 
 

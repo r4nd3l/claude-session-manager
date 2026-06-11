@@ -319,6 +319,12 @@ msgstr "Die Dateien werden in den Papierkorb verschoben und können wiederherges
 msgid "Move to Trash"
 msgstr "In den Papierkorb"
 
+msgid "New window"
+msgstr "Neues Fenster"
+
+msgid "Restart now"
+msgstr "Jetzt neu starten"
+
 msgid "Choose project directory"
 msgstr "Projektverzeichnis wählen"
 

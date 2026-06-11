@@ -16,7 +16,7 @@ from gi.repository import Adw, Gio, GLib, GObject, Gtk  # noqa: E402
 from . import __version__, dialogs
 from .i18n import _
 from .models import SessionItem
-from .prefs import PreferencesDialog, apply_color_scheme
+from .prefs import PreferencesDialog
 from .sessions import Session, export_markdown
 from .sidebar import SessionSidebar
 from .state import AppState
@@ -49,16 +49,14 @@ def _status_icon(status: str) -> Gio.Icon | None:
 
 
 class MainWindow(Adw.ApplicationWindow):
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, state: AppState, store: SessionStore, **kwargs) -> None:
         super().__init__(**kwargs)
         self.set_title("Claude Session Manager")
         self.set_icon_name("io.github.r4nd3l.ClaudeSessionManager")
         self.set_default_size(1280, 800)
 
-        self.state = AppState()
-        apply_color_scheme(self.state.get_setting("color_scheme"))
-
-        self.store = SessionStore(self.state)
+        self.state = state
+        self.store = store
         self._pages: dict[str, Adw.TabPage] = {}  # session_id -> open tab
         self._confirmed_closes: set[Adw.TabPage] = set()
         self._closing_pages: dict[Adw.TabPage, int] = {}  # graceful close in progress -> attempts
@@ -150,8 +148,6 @@ class MainWindow(Adw.ApplicationWindow):
         self.sidebar_toggle.connect(
             "toggled", lambda b: self.sidebar.set_visible(b.get_active())
         )
-
-        self.store.start()
 
     # -- sidebar width persistence -------------------------------------------
 

@@ -127,6 +127,8 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "The files are moved to the trash and can be restored.":
             "A fájlok a kukába kerülnek, és visszaállíthatók.",
         "Move to Trash": "Kukába",
+        "New window": "Új ablak",
+        "Restart now": "Újraindítás most",
         "Choose project directory": "Válassz projektkönyvtárat",
         "Tab name": "Lap neve",
         "Export session as Markdown": "Munkamenet exportálása Markdownként",
@@ -251,6 +253,8 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "The files are moved to the trash and can be restored.":
             "Die Dateien werden in den Papierkorb verschoben und können wiederhergestellt werden.",
         "Move to Trash": "In den Papierkorb",
+        "New window": "Neues Fenster",
+        "Restart now": "Jetzt neu starten",
         "Choose project directory": "Projektverzeichnis wählen",
         "Tab name": "Tab-Name",
         "Export session as Markdown": "Sitzung als Markdown exportieren",
@@ -376,6 +380,8 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "The files are moved to the trash and can be restored.":
             "Los archivos se mueven a la papelera y se pueden restaurar.",
         "Move to Trash": "Mover a la papelera",
+        "New window": "Nueva ventana",
+        "Restart now": "Reiniciar ahora",
         "Choose project directory": "Elegir directorio del proyecto",
         "Tab name": "Nombre de la pestaña",
         "Export session as Markdown": "Exportar sesión como Markdown",
@@ -500,6 +506,8 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "The files are moved to the trash and can be restored.":
             "Les fichiers sont mis à la corbeille et peuvent être restaurés.",
         "Move to Trash": "Mettre à la corbeille",
+        "New window": "Nouvelle fenêtre",
+        "Restart now": "Redémarrer maintenant",
         "Choose project directory": "Choisir le répertoire du projet",
         "Tab name": "Nom de l’onglet",
         "Export session as Markdown": "Exporter la session en Markdown",

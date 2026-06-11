@@ -212,6 +212,7 @@ class SessionSidebar(Gtk.Box):
         header.pack_start(self.select_btn)
 
         menu = Gio.Menu()
+        menu.append(_("New window"), "app.new-window")
         menu.append(_("Show hidden sessions"), "win.show-hidden")
         menu.append(_("MCP servers"), "win.mcp-servers")
         menu.append(_("Preferences"), "win.preferences")
@@ -280,6 +281,11 @@ class SessionSidebar(Gtk.Box):
         self.footer.set_margin_bottom(6)
         self.footer.set_ellipsize(_ELLIPSIZE_END)
         self._view.add_bottom_bar(self.footer)
+
+        # Populate from whatever the shared store already holds (a sibling
+        # window may have triggered the scan before this sidebar connected).
+        if store.model.get_n_items():
+            self._on_store_refreshed(store, True)
 
     # -- store sync ------------------------------------------------------------
 

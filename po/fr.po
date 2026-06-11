@@ -319,6 +319,12 @@ msgstr "Les fichiers sont mis à la corbeille et peuvent être restaurés."
 msgid "Move to Trash"
 msgstr "Mettre à la corbeille"
 
+msgid "New window"
+msgstr "Nouvelle fenêtre"
+
+msgid "Restart now"
+msgstr "Redémarrer maintenant"
+
 msgid "Choose project directory"
 msgstr "Choisir le répertoire du projet"
 

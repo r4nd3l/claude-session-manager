@@ -319,6 +319,12 @@ msgstr "Los archivos se mueven a la papelera y se pueden restaurar."
 msgid "Move to Trash"
 msgstr "Mover a la papelera"
 
+msgid "New window"
+msgstr "Nueva ventana"
+
+msgid "Restart now"
+msgstr "Reiniciar ahora"
+
 msgid "Choose project directory"
 msgstr "Elegir directorio del proyecto"
 

@@ -319,6 +319,12 @@ msgstr "A fájlok a kukába kerülnek, és visszaállíthatók."
 msgid "Move to Trash"
 msgstr "Kukába"
 
+msgid "New window"
+msgstr "Új ablak"
+
+msgid "Restart now"
+msgstr "Újraindítás most"
+
 msgid "Choose project directory"
 msgstr "Válassz projektkönyvtárat"
 
