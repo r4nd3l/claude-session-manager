@@ -175,8 +175,8 @@ msgstr "Afficher les sessions masquées"
 msgid "MCP servers"
 msgstr "Serveurs MCP"
 
-msgid "About Claude Session Manager"
-msgstr "À propos de Claude Session Manager"
+msgid "About Agent Session Manager"
+msgstr "À propos d’Agent Session Manager"
 
 msgid "Refresh session list"
 msgstr "Actualiser la liste des sessions"

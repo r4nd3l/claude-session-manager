@@ -175,8 +175,8 @@ msgstr "Versteckte Sitzungen anzeigen"
 msgid "MCP servers"
 msgstr "MCP-Server"
 
-msgid "About Claude Session Manager"
-msgstr "Über Claude Session Manager"
+msgid "About Agent Session Manager"
+msgstr "Über Agent Session Manager"
 
 msgid "Refresh session list"
 msgstr "Sitzungsliste aktualisieren"

@@ -175,8 +175,8 @@ msgstr "Rejtett munkamenetek megjelenítése"
 msgid "MCP servers"
 msgstr "MCP-kiszolgálók"
 
-msgid "About Claude Session Manager"
-msgstr "A Claude Session Manager névjegye"
+msgid "About Agent Session Manager"
+msgstr "Az Agent Session Manager névjegye"
 
 msgid "Refresh session list"
 msgstr "Munkamenetlista frissítése"
