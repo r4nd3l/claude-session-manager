@@ -6,7 +6,8 @@ Agent Session Manager is a GTK4 app. You'll need:
 
 - **Python ≥ 3.10**
 - **GTK 4**, **libadwaita ≥ 1.5**, **VTE** (the GTK 4 build), and **PyGObject**
-- The [`claude` CLI](https://claude.com/claude-code) on your `PATH`
+- A supported agent's CLI on your `PATH` — currently the
+  [`claude` CLI](https://claude.com/claude-code)
 
 Install the system libraries with your distro's package manager:
 
@@ -86,10 +87,10 @@ To add a desktop launcher and icon for your user:
 
 ## First run
 
-On first launch the sidebar lists every session found under
-`~/.claude/projects/`, with all groups collapsed. Expand a project, click a
-session, and it opens in a terminal tab running `claude --resume`. If you
-haven't used Claude Code yet, run `claude` in a project once and the session
-will show up automatically.
+On first launch the sidebar lists every session found on disk (for Claude Code,
+under `~/.claude/projects/`), with all groups collapsed. Expand a project, click
+a session, and it opens in a terminal tab that resumes it. If you haven't used a
+supported agent yet, run `claude` in a project once and the session will show up
+automatically.
 
 ![The main window on first run](/img/main-window.png)

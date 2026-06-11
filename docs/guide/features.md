@@ -14,8 +14,9 @@
   session by name, project, preview, or ID.
 - **Status dots**: green = open in a tab, blue = produced output while in the
   background.
-- **Waiting badge** — an amber **?** marks sessions where Claude's last message
-  was a question awaiting your reply, so you can spot what needs you at a glance.
+- **Waiting badge** — an amber **?** marks sessions where the agent's last
+  message was a question awaiting your reply, so you can spot what needs you at
+  a glance.
 - **Interrupted badge** — a red stop icon marks sessions you stopped mid-task.
 
 ![Sidebar with the Favorites section expanded](/img/sidebar-favorites.png)
@@ -39,20 +40,21 @@ Enter opens, Esc closes.
 
 ![Setting a tab emoji, with two sessions open as tabs](/img/tab-emoji.png)
 
-All of this is stored in `~/.config/agent-session-manager/state.json`. Claude
-Code's own session files are never modified.
+All of this is stored in `~/.config/agent-session-manager/state.json`. Your
+agents' own session files are never modified.
 
 ## Tabs & terminals
 
 - Clicking a session opens a tab with an embedded **VTE terminal** running your
-  `$SHELL` with `claude --resume <id>` in the session's project directory.
+  `$SHELL` with the agent's resume command (`claude --resume <id>` for Claude
+  Code) in the session's project directory.
 - **Per-tab status dots** mirror the sidebar.
 - **Rename** tabs, **copy the session ID**, or **fork** a session
   (`--fork-session`) from the right-click menu.
-- **Shift+Enter** inserts a newline in Claude's prompt.
+- **Shift+Enter** inserts a newline in the agent's prompt.
 - **In-terminal search** (`Ctrl+Shift+G`) over the scrollback.
-- Closing a tab asks Claude to **exit cleanly** (`/exit`) in the background
-  first, rather than terminating it.
+- Closing a tab asks the agent to **exit cleanly** (Claude Code's `/exit`) in
+  the background first, rather than terminating it.
 - A **close-all-tabs** button appears when more than one tab is open.
 - The **New Session** button starts in the last-used folder; its dropdown picks
   a different one. The sidebar is **resizable** (drag the divider) and its width

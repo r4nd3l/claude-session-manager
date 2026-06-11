@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: 'Agent Session Manager',
-  description: 'A native Linux home for your Claude Code sessions.',
+  description: 'A native Linux home for your AI coding-agent sessions.',
   lang: 'en-US',
   base: '/agent-session-manager/',
   lastUpdated: true,

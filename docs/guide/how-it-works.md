@@ -2,7 +2,8 @@
 
 ## Reading sessions
 
-Claude Code stores each session as a JSONL transcript under
+Each supported agent stores its sessions as JSONL transcripts — Claude Code,
+for example, writes them under
 `~/.claude/projects/<encoded-path>/<uuid>.jsonl`. Agent Session Manager scans
 that directory, reads a small prefix of each transcript to extract the project
 directory and a message preview, and watches the folder with a
@@ -16,15 +17,16 @@ a confirmation.
 
 Custom names, emoji, favorites, hidden sessions, and preferences are stored
 separately in `~/.config/agent-session-manager/state.json`. This keeps the
-app's data fully decoupled from Claude Code's — you can delete the config at
+app's data fully decoupled from the agents' own — you can delete the config at
 any time without affecting a single session.
 
 ## Terminals
 
 Each tab embeds a [VTE](https://gitlab.gnome.org/GNOME/vte) terminal — the same
 widget behind GNOME Terminal and Ptyxis. The app spawns your `$SHELL` and types
-`claude --resume <id>` into it, so your aliases and environment apply and you
-drop back to a prompt when Claude exits.
+the agent's resume command (e.g. `claude --resume <id>`) into it, so your
+aliases and environment apply and you drop back to a prompt when the agent
+exits.
 
 ## The stack
 

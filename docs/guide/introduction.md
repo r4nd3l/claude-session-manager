@@ -1,26 +1,28 @@
 # What is Agent Session Manager?
 
-Agent Session Manager is a native Linux desktop app that gives your
-[Claude Code](https://claude.com/claude-code) sessions a proper home.
+Agent Session Manager is a native Linux desktop app that gives your AI
+coding-agent sessions a proper home. It supports
+[Claude Code](https://claude.com/claude-code) today, with more agents (such as
+Cursor) on the way.
 
 ![Agent Session Manager](https://raw.githubusercontent.com/r4nd3l/agent-session-manager/main/data/screenshot.png)
 
-If you use Claude Code daily, you accumulate **dozens of sessions** scattered
-across every project you touch. They live as JSONL transcripts under
-`~/.claude/projects/`, named by UUID — there's no overview, no way to name
-them, and no quick way to tell which one was which. `claude --resume` only
-shows a picker for the current directory.
+If you use a coding agent daily, you accumulate **dozens of sessions** scattered
+across every project you touch. They live as JSONL transcripts named by UUID
+(Claude Code, for instance, stores them under `~/.claude/projects/`) — there's
+no overview, no way to name them, and no quick way to tell which one was which.
+The agent's own `--resume` only shows a picker for the current directory.
 
 This app fixes that. It scans every session on your machine, presents them in
 a searchable sidebar grouped by project, lets you **name and star** the ones
-that matter, and opens any of them in an **embedded terminal tab** that runs
-`claude --resume` right where the session started.
+that matter, and opens any of them in an **embedded terminal tab** that resumes
+it right where the session started.
 
 ::: tip Unofficial community tool
-Agent Session Manager is not affiliated with or endorsed by Anthropic. It is
-strictly read-only with respect to Claude Code's data — names, favorites, and
-all app state live in `~/.config/agent-session-manager/`. Your transcripts
-are never modified.
+Agent Session Manager is an independent community project, not affiliated with
+or endorsed by any agent vendor (including Anthropic). It is strictly read-only
+with respect to your agents' data — names, favorites, and all app state live in
+`~/.config/agent-session-manager/`. Your transcripts are never modified.
 :::
 
 ## Why use it?
@@ -36,11 +38,11 @@ are never modified.
 
 ## How it compares
 
-Claude Code is a terminal program, and you can absolutely keep using it bare.
-Agent Session Manager is a layer *on top* — it doesn't replace the CLI, it
+Coding agents are terminal programs, and you can absolutely keep using them
+bare. Agent Session Manager is a layer *on top* — it doesn't replace the CLI, it
 launches and organizes it:
 
-| | Bare `claude --resume` | Agent Session Manager |
+| | Bare `--resume` | Agent Session Manager |
 | --- | --- | --- |
 | See all sessions across projects | ❌ | ✅ |
 | Custom names & favorites | ❌ | ✅ |

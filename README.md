@@ -5,27 +5,27 @@
 [![AUR](https://img.shields.io/aur/version/agent-session-manager?label=AUR)](https://aur.archlinux.org/packages/agent-session-manager)
 [![Release](https://img.shields.io/github/v/release/r4nd3l/agent-session-manager?label=release)](https://github.com/r4nd3l/agent-session-manager/releases/latest)
 
-Native GTK4/libadwaita desktop app to manage [Claude Code](https://claude.com/claude-code) sessions.
+Native GTK4/libadwaita desktop app to browse, name, and resume your AI coding-agent sessions in embedded terminal tabs. Supports [Claude Code](https://claude.com/claude-code) today, with more agents (such as Cursor) on the way.
 
 📖 **[Documentation](https://r4nd3l.github.io/agent-session-manager/)**
 
-> **Unofficial community tool.** Not affiliated with or endorsed by Anthropic.
-> It never modifies Claude Code's own data — all app state lives in its own config file.
+> **Unofficial community tool.** An independent community project, not affiliated with or endorsed by any agent vendor (including Anthropic).
+> It never modifies your agents' own session data — all app state lives in its own config file.
 
 ![Agent Session Manager](data/screenshot.png)
 
 Features:
 
-- **Sidebar** lists every session found under `~/.claude/projects/`, grouped by project (collapsible headers, with collapse-all/expand-all buttons next to the search box), with a **Favorites** section pinned on top — star a session to move it there. A **search box** filters by name, project, preview, or session id, and the list **updates live** as sessions are created or written to.
-- Sessions can be given **custom names** (pencil icon). Names, favorites, and hidden sessions persist in `~/.config/agent-session-manager/state.json` — Claude's own session files are never modified.
-- **Clicking a session** opens a tab in the main area; each tab is an embedded **VTE terminal** running your `$SHELL` with `claude --resume <session-id>` typed into it, in the session's original project directory. When claude exits you drop to a shell prompt; the tab closes when the shell exits. Closing a tab asks Claude to exit cleanly (`/exit`) in the background first.
+- **Sidebar** lists every session found on disk (for Claude Code, under `~/.claude/projects/`), grouped by project (collapsible headers, with collapse-all/expand-all buttons next to the search box), with a **Favorites** section pinned on top — star a session to move it there. A **search box** filters by name, project, preview, or session id, and the list **updates live** as sessions are created or written to.
+- Sessions can be given **custom names** (pencil icon). Names, favorites, and hidden sessions persist in `~/.config/agent-session-manager/state.json` — your agents' own session files are never modified.
+- **Clicking a session** opens a tab in the main area; each tab is an embedded **VTE terminal** running your `$SHELL` with the agent's resume command (`claude --resume <session-id>` for Claude Code) typed into it, in the session's original project directory. When the agent exits you drop to a shell prompt; the tab closes when the shell exits. Closing a tab asks the agent to exit cleanly (Claude Code's `/exit`) in the background first.
 - **In-terminal search** with a find bar (`Ctrl+Shift+G`) over the tab's scrollback.
-- **Status dots** in both the sidebar and on each open tab: green = open, blue = output arrived in a background tab. A **waiting badge** (amber ?) marks sessions where Claude's last message was a question awaiting your reply.
-- **Tabs** can be renamed, given an emoji prefix, or have their session ID copied (right-click → Rename… / Set emoji… / Copy session ID); renaming a session's tab updates its name everywhere. A **close-all button** appears when more than one tab is open, and the **sidebar toggles** with the header button or `F9`. **Shift+Enter** inserts a newline in Claude's prompt.
+- **Status dots** in both the sidebar and on each open tab: green = open, blue = output arrived in a background tab. A **waiting badge** (amber ?) marks sessions where the agent's last message was a question awaiting your reply.
+- **Tabs** can be renamed, given an emoji prefix, or have their session ID copied (right-click → Rename… / Set emoji… / Copy session ID); renaming a session's tab updates its name everywhere. A **close-all button** appears when more than one tab is open, and the **sidebar toggles** with the header button or `F9`. **Shift+Enter** inserts a newline in the agent's prompt.
 - **Right-click a session** for the full action set: open, open in [Ghostty](https://ghostty.org) (external window — Ghostty can't be embedded), fork (`--fork-session`), rename, favorite, **details** (messages/models/tokens, a peek at recent messages, and MCP servers/usage), copy session id, reveal transcript, hide, or move the transcript to trash.
 - **Desktop notifications** when a background session goes quiet after producing output — click to jump to that tab (toggle in Preferences).
 - **Select mode** (checkbox button in the sidebar header) for bulk actions: open, star, hide, or trash many sessions at once.
-- **New session** (tab icon in the header) asks for a project folder and starts a fresh `claude` there.
+- **New session** (tab icon in the header) asks for a project folder and starts a fresh agent session (`claude`) there.
 - **Quick switcher** (`Ctrl+Shift+K`) jumps to any session by type-ahead; the **New Session** button remembers your last folder; the sidebar is **resizable** and its width is remembered.
 - **MCP servers browser** (menu → MCP servers): a read-only view of every MCP server configured in `~/.claude.json`, global and per-project.
 - **Preferences** (menu → Preferences, or `Ctrl+,`): terminal font, scrollback, color scheme.
@@ -61,7 +61,7 @@ sudo dnf install python3-gobject gtk4 libadwaita vte291-gtk4
 sudo pacman -S python-gobject gtk4 libadwaita vte4
 ```
 
-Plus the [`claude` CLI](https://claude.com/claude-code) on your `PATH`.
+Plus a supported agent's CLI on your `PATH` — currently the [`claude` CLI](https://claude.com/claude-code).
 
 > Installing with `pipx`? PyGObject comes from the system, so use
 > `pipx install --system-site-packages agent-session-manager-gtk`.
@@ -112,7 +112,7 @@ claude_session_manager/
 ├── sessions.py   # session discovery + transcript statistics
 ├── state.py      # persistent app state (names, favorites, hidden, settings)
 ├── prefs.py      # preferences dialog
-└── terminal.py   # VTE terminal tab spawning the claude CLI
+└── terminal.py   # VTE terminal tab spawning the agent CLI
 data/
 ├── io.github.r4nd3l.AgentSessionManager.desktop   # launcher template
 ├── icons/io.github.r4nd3l.AgentSessionManager.svg # app icon
