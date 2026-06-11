@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from claude_session_manager.sessions import (
     configured_mcp_servers,
     discover_sessions,
@@ -7,6 +9,16 @@ from claude_session_manager.sessions import (
     parse_details,
     read_mcp_config,
 )
+
+
+@pytest.fixture(autouse=True)
+def _isolate_claude(monkeypatch):
+    """These are Claude-discovery tests: force Claude available regardless of
+    PATH, and keep Cursor from scanning the real ~/.cursor."""
+    import claude_session_manager.providers as providers_mod
+
+    monkeypatch.setattr(providers_mod.ClaudeProvider, "available", lambda self: True)
+    monkeypatch.setattr(providers_mod.CursorProvider, "available", lambda self: False)
 
 
 def test_discover_finds_only_real_sessions(projects_dir):
@@ -225,10 +237,7 @@ def test_parse_details_handles_garbage(tmp_path):
 
 
 def test_discover_handles_missing_dir(monkeypatch, tmp_path):
-    import claude_session_manager.providers as providers_mod
     import claude_session_manager.sessions as sessions_mod
 
     monkeypatch.setattr(sessions_mod, "CLAUDE_PROJECTS_DIR", tmp_path / "nope")
-    monkeypatch.setattr(providers_mod.ClaudeProvider, "available", lambda self: True)
-    monkeypatch.setattr(providers_mod.CursorProvider, "available", lambda self: False)
     assert discover_sessions() == []
