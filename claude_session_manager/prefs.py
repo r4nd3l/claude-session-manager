@@ -11,7 +11,46 @@ gi.require_version("Adw", "1")
 from gi.repository import Adw, Gtk, Pango  # noqa: E402
 
 from .state import AppState
-from .themes import DEFAULT_THEME, THEME_NAMES
+from .themes import DEFAULT_THEME, THEME_NAMES, get_theme
+
+
+def _hex_rgb(hex6: str) -> tuple[float, float, float]:
+    return tuple(int(hex6[i : i + 2], 16) / 255 for i in (0, 2, 4))
+
+
+def _draw_swatch(_area, cr, width: int, height: int, name: str) -> None:
+    theme = get_theme(name)
+    if theme is None:  # "Default" — neutral placeholder
+        cr.set_source_rgb(0.55, 0.55, 0.55)
+        cr.rectangle(0, 0, width, height)
+        cr.fill()
+        return
+    r, g, b = _hex_rgb(theme["bg"])
+    cr.set_source_rgb(r, g, b)
+    cr.rectangle(0, 0, width, height)
+    cr.fill()
+    # foreground swatch, then the six accent colours (red…cyan)
+    r, g, b = _hex_rgb(theme["fg"])
+    cr.set_source_rgb(r, g, b)
+    cr.rectangle(6, 4, 10, height - 8)
+    cr.fill()
+    sw, gap = 13, 3
+    x = width - len([1, 2, 3, 4, 5, 6]) * (sw + gap)
+    for i in (1, 2, 3, 4, 5, 6):
+        r, g, b = _hex_rgb(theme["palette"][i])
+        cr.set_source_rgb(r, g, b)
+        cr.rectangle(x, 4, sw, height - 8)
+        cr.fill()
+        x += sw + gap
+
+
+def _theme_swatch(name: str) -> Gtk.DrawingArea:
+    area = Gtk.DrawingArea()
+    area.set_content_width(130)
+    area.set_content_height(22)
+    area.set_valign(Gtk.Align.CENTER)
+    area.set_draw_func(_draw_swatch, name)
+    return area
 
 _SCHEMES = [
     ("system", "Follow system", Adw.ColorScheme.DEFAULT),
@@ -61,14 +100,25 @@ class PreferencesDialog(Adw.PreferencesDialog):
         scroll_row.connect("notify::value", self._on_scrollback_changed)
         terminal_group.add(scroll_row)
 
-        self._theme_row = Adw.ComboRow(title="Color theme")
-        self._theme_row.set_model(Gtk.StringList.new(THEME_NAMES))
         current_theme = state.get_setting("terminal_theme") or DEFAULT_THEME
-        self._theme_row.set_selected(
-            THEME_NAMES.index(current_theme) if current_theme in THEME_NAMES else 0
-        )
-        self._theme_row.connect("notify::selected", self._on_theme_changed)
-        terminal_group.add(self._theme_row)
+        if current_theme not in THEME_NAMES:
+            current_theme = DEFAULT_THEME
+        self._theme_expander = Adw.ExpanderRow(title="Color theme", subtitle=current_theme)
+        radio_group = None
+        for name in THEME_NAMES:
+            row = Adw.ActionRow(title=name)
+            radio = Gtk.CheckButton()
+            if radio_group is None:
+                radio_group = radio
+            else:
+                radio.set_group(radio_group)
+            radio.set_active(name == current_theme)
+            radio.connect("toggled", self._on_theme_radio, name)
+            row.add_prefix(radio)
+            row.set_activatable_widget(radio)
+            row.add_suffix(_theme_swatch(name))
+            self._theme_expander.add_row(row)
+        terminal_group.add(self._theme_expander)
         page.add(terminal_group)
 
         appearance_group = Adw.PreferencesGroup(title="Appearance")
@@ -108,8 +158,11 @@ class PreferencesDialog(Adw.PreferencesDialog):
         self._state.set_setting("scrollback", int(row.get_value()))
         self._on_change()
 
-    def _on_theme_changed(self, row: Adw.ComboRow, _pspec) -> None:
-        self._state.set_setting("terminal_theme", THEME_NAMES[row.get_selected()])
+    def _on_theme_radio(self, radio: Gtk.CheckButton, name: str) -> None:
+        if not radio.get_active():
+            return
+        self._state.set_setting("terminal_theme", name)
+        self._theme_expander.set_subtitle(name)
         self._on_change()
 
     def _on_scheme_changed(self, row: Adw.ComboRow, _pspec) -> None:

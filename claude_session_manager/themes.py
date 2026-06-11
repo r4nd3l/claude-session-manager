@@ -48,10 +48,45 @@ _THEMES: dict[str, dict | None] = {
                     "88c0d0", "e5e9f0", "4c566a", "bf616a", "a3be8c", "ebcb8b",
                     "81a1c1", "b48ead", "8fbcbb", "eceff4"],
     },
+    "Catppuccin Mocha": {
+        "fg": "cdd6f4", "bg": "1e1e2e",
+        "palette": ["45475a", "f38ba8", "a6e3a1", "f9e2af", "89b4fa", "f5c2e7",
+                    "94e2d5", "bac2de", "585b70", "f38ba8", "a6e3a1", "f9e2af",
+                    "89b4fa", "f5c2e7", "94e2d5", "a6adc8"],
+    },
+    "Tokyo Night": {
+        "fg": "c0caf5", "bg": "1a1b26",
+        "palette": ["15161e", "f7768e", "9ece6a", "e0af68", "7aa2f7", "bb9af7",
+                    "7dcfff", "a9b1d6", "414868", "f7768e", "9ece6a", "e0af68",
+                    "7aa2f7", "bb9af7", "7dcfff", "c0caf5"],
+    },
+    "Monokai": {
+        "fg": "f8f8f2", "bg": "272822",
+        "palette": ["272822", "f92672", "a6e22e", "f4bf75", "66d9ef", "ae81ff",
+                    "a1efe4", "f8f8f2", "75715e", "f92672", "a6e22e", "f4bf75",
+                    "66d9ef", "ae81ff", "a1efe4", "f9f8f5"],
+    },
+    "One Dark": {
+        "fg": "abb2bf", "bg": "282c34",
+        "palette": ["282c34", "e06c75", "98c379", "e5c07b", "61afef", "c678dd",
+                    "56b6c2", "abb2bf", "5c6370", "e06c75", "98c379", "e5c07b",
+                    "61afef", "c678dd", "56b6c2", "ffffff"],
+    },
+    "Catppuccin Latte": {
+        "fg": "4c4f69", "bg": "eff1f5",
+        "palette": ["5c5f77", "d20f39", "40a02b", "df8e1d", "1e66f5", "ea76cb",
+                    "179299", "acb0be", "6c6f85", "d20f39", "40a02b", "df8e1d",
+                    "1e66f5", "ea76cb", "179299", "bcc0cc"],
+    },
 }
 
 THEME_NAMES = list(_THEMES)
 DEFAULT_THEME = "Default"
+
+
+def get_theme(name: str | None) -> dict | None:
+    """The palette dict for a theme name, or None for 'Default'/unknown."""
+    return _THEMES.get(name or DEFAULT_THEME)
 
 
 def _rgba(hex_str: str) -> Gdk.RGBA:
