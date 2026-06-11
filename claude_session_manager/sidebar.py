@@ -212,7 +212,6 @@ class SessionSidebar(Gtk.Box):
         header.pack_start(self.select_btn)
 
         menu = Gio.Menu()
-        menu.append(_("New window"), "app.new-window")
         menu.append(_("Show hidden sessions"), "win.show-hidden")
         menu.append(_("MCP servers"), "win.mcp-servers")
         menu.append(_("Preferences"), "win.preferences")

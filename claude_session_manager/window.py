@@ -91,6 +91,7 @@ class MainWindow(Adw.ApplicationWindow):
 
         new_menu = Gio.Menu()
         new_menu.append(_("New session in folder…"), "win.new-session-choose")
+        new_menu.append(_("New window"), "app.new-window")
         new_btn = Adw.SplitButton(icon_name="tab-new-symbolic")
         new_btn.set_tooltip_text(_("New Claude session (Ctrl+Shift+T)"))
         new_btn.set_menu_model(new_menu)
