@@ -1,7 +1,7 @@
 Source: claude-session-manager
 Section: utils
 Priority: optional
-Maintainer: Máté Molnár <molnar.mate@zengo.eu>
+Maintainer: Máté Molnár <matemiller992@gmail.com>
 Build-Depends: debhelper-compat (= 13),
                dh-python,
                pybuild-plugin-pyproject,
