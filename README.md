@@ -67,6 +67,17 @@ Plus the [`claude` CLI](https://claude.com/claude-code) on your `PATH`.
 
 ## Install
 
+**Ubuntu — PPA:**
+
+```bash
+sudo add-apt-repository ppa:matemiller992/claude-session-manager
+sudo apt update && sudo apt install claude-session-manager
+```
+
+**Arch — AUR:** `yay -S claude-session-manager`
+
+**Any distro — pipx:** `pipx install --system-site-packages claude-session-manager-gtk`
+
 **Debian/Ubuntu — .deb package** (from the [latest release](https://github.com/r4nd3l/claude-session-manager/releases/latest)):
 
 ```bash

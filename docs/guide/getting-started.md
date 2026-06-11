@@ -37,9 +37,17 @@ as `claude-session-manager`:
 yay -S claude-session-manager   # or: paru -S claude-session-manager
 ```
 
+### Ubuntu — PPA
+
+```bash
+sudo add-apt-repository ppa:matemiller992/claude-session-manager
+sudo apt update
+sudo apt install claude-session-manager
+```
+
 ### Debian / Ubuntu — `.deb`
 
-Grab the latest `.deb` from the
+Or grab the latest `.deb` from the
 [releases page](https://github.com/r4nd3l/claude-session-manager/releases/latest)
 and install it — dependencies are pulled in automatically:
 
@@ -47,7 +55,7 @@ and install it — dependencies are pulled in automatically:
 sudo apt install ./claude-session-manager_*_all.deb
 ```
 
-It then appears in your app grid as **Claude Session Manager**.
+Either way it appears in your app grid as **Claude Session Manager**.
 
 ### PyPI — `pipx`
 

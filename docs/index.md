@@ -49,7 +49,12 @@ features:
 yay -S claude-session-manager
 ```
 
-```bash [Debian / Ubuntu]
+```bash [Ubuntu (PPA)]
+sudo add-apt-repository ppa:matemiller992/claude-session-manager
+sudo apt update && sudo apt install claude-session-manager
+```
+
+```bash [Debian / Ubuntu (.deb)]
 # from the latest GitHub release
 sudo apt install ./claude-session-manager_*_all.deb
 ```
