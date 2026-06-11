@@ -133,19 +133,26 @@ class PreferencesDialog(Adw.PreferencesDialog):
         appearance_group.add(scheme_row)
         page.add(appearance_group)
 
-        lang_group = Adw.PreferencesGroup(title=_("Language"))
-        self._lang_codes = [code for code, _label in LANGUAGES]
-        self._lang_row = Adw.ComboRow(
-            title=_("Language"),
-            subtitle=_("Restart to apply"),
-        )
-        self._lang_row.set_model(Gtk.StringList.new([label for _code, label in LANGUAGES]))
         current_lang = state.get_setting("language") or ""
-        self._lang_row.set_selected(
-            self._lang_codes.index(current_lang) if current_lang in self._lang_codes else 0
+        current_label = next(
+            (label for code, label in LANGUAGES if code == current_lang), LANGUAGES[0][1]
         )
-        self._lang_row.connect("notify::selected", self._on_language_changed)
-        lang_group.add(self._lang_row)
+        lang_group = Adw.PreferencesGroup(title=_("Language"), description=_("Restart to apply"))
+        self._lang_expander = Adw.ExpanderRow(title=_("Language"), subtitle=current_label)
+        lang_radio_group = None
+        for code, label in LANGUAGES:
+            row = Adw.ActionRow(title=label)
+            radio = Gtk.CheckButton()
+            if lang_radio_group is None:
+                lang_radio_group = radio
+            else:
+                radio.set_group(lang_radio_group)
+            radio.set_active(code == current_lang)
+            radio.connect("toggled", self._on_language_radio, code, label)
+            row.add_prefix(radio)
+            row.set_activatable_widget(radio)
+            self._lang_expander.add_row(row)
+        lang_group.add(self._lang_expander)
         page.add(lang_group)
 
         notif_group = Adw.PreferencesGroup(title=_("Notifications"))
@@ -191,6 +198,9 @@ class PreferencesDialog(Adw.PreferencesDialog):
         self._state.set_setting("notify_idle", row.get_active())
         self._on_change()
 
-    def _on_language_changed(self, row: Adw.ComboRow, _pspec) -> None:
-        self._state.set_setting("language", self._lang_codes[row.get_selected()])
+    def _on_language_radio(self, radio: Gtk.CheckButton, code: str, label: str) -> None:
+        if not radio.get_active():
+            return
+        self._state.set_setting("language", code)
+        self._lang_expander.set_subtitle(label)
         self._on_change()
