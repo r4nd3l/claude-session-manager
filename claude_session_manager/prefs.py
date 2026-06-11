@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
+import shlex
+import subprocess
+import sys
 from collections.abc import Callable
 
 import gi
 
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Adw, Gtk, Pango  # noqa: E402
+from gi.repository import Adw, Gio, Gtk, Pango  # noqa: E402
 
 from .i18n import LANGUAGES, N_, _
 from .state import AppState
@@ -134,10 +137,16 @@ class PreferencesDialog(Adw.PreferencesDialog):
         page.add(appearance_group)
 
         current_lang = state.get_setting("language") or ""
+        self._initial_lang = current_lang
         current_label = next(
             (label for code, label in LANGUAGES if code == current_lang), LANGUAGES[0][1]
         )
         lang_group = Adw.PreferencesGroup(title=_("Language"), description=_("Restart to apply"))
+        self._restart_btn = Gtk.Button(label=_("Restart now"), valign=Gtk.Align.CENTER)
+        self._restart_btn.add_css_class("suggested-action")
+        self._restart_btn.set_visible(False)
+        self._restart_btn.connect("clicked", self._on_restart)
+        lang_group.set_header_suffix(self._restart_btn)
         self._lang_expander = Adw.ExpanderRow(title=_("Language"), subtitle=current_label)
         lang_radio_group = None
         for code, label in LANGUAGES:
@@ -203,4 +212,16 @@ class PreferencesDialog(Adw.PreferencesDialog):
             return
         self._state.set_setting("language", code)
         self._lang_expander.set_subtitle(label)
+        self._restart_btn.set_visible(code != self._initial_lang)
         self._on_change()
+
+    def _on_restart(self, _button: Gtk.Button) -> None:
+        # Relaunch after a short delay so this instance fully exits and frees
+        # the single-instance lock before the new one registers.
+        subprocess.Popen(
+            ["sh", "-c", f"sleep 1.5; exec {shlex.quote(sys.executable)} -m claude_session_manager"],
+            start_new_session=True,
+        )
+        app = Gio.Application.get_default()
+        if app is not None:
+            app.quit()
