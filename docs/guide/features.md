@@ -39,7 +39,7 @@ Enter opens, Esc closes.
 
 ![Setting a tab emoji, with two sessions open as tabs](/img/tab-emoji.png)
 
-All of this is stored in `~/.config/claude-session-manager/state.json`. Claude
+All of this is stored in `~/.config/agent-session-manager/state.json`. Claude
 Code's own session files are never modified.
 
 ## Tabs & terminals

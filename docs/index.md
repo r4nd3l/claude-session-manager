@@ -3,12 +3,12 @@
 layout: home
 
 hero:
-  name: "Claude Session Manager"
+  name: "Agent Session Manager"
   text: "A native home for your Claude Code sessions"
   tagline: Browse, name, and resume every Claude Code session on your machine — in embedded terminal tabs.
   image:
-    src: https://raw.githubusercontent.com/r4nd3l/claude-session-manager/main/data/screenshot.png
-    alt: Claude Session Manager
+    src: https://raw.githubusercontent.com/r4nd3l/agent-session-manager/main/data/screenshot.png
+    alt: Agent Session Manager
   actions:
     - theme: brand
       text: What is it?
@@ -18,7 +18,7 @@ hero:
       link: /guide/getting-started
     - theme: alt
       text: View on GitHub
-      link: https://github.com/r4nd3l/claude-session-manager
+      link: https://github.com/r4nd3l/agent-session-manager
 
 features:
   - icon: 🗂️
@@ -46,24 +46,24 @@ features:
 ::: code-group
 
 ```bash [Arch (AUR)]
-yay -S claude-session-manager
+yay -S agent-session-manager
 ```
 
 ```bash [Ubuntu (PPA)]
-sudo add-apt-repository ppa:matemiller992/claude-session-manager
-sudo apt update && sudo apt install claude-session-manager
+sudo add-apt-repository ppa:matemiller992/agent-session-manager
+sudo apt update && sudo apt install agent-session-manager
 ```
 
 ```bash [Debian / Ubuntu (.deb)]
 # from the latest GitHub release
-sudo apt install ./claude-session-manager_*_all.deb
+sudo apt install ./agent-session-manager_*_all.deb
 ```
 
 ```bash [pipx (any distro)]
-pipx install --system-site-packages claude-session-manager-gtk
+pipx install --system-site-packages agent-session-manager-gtk
 ```
 
 :::
 
 See [Getting Started](/guide/getting-started) for system requirements and
-from-source instructions. The installed command is `claude-session-manager`.
+from-source instructions. The installed command is `agent-session-manager`.

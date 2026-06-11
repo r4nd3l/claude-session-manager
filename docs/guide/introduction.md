@@ -1,9 +1,9 @@
-# What is Claude Session Manager?
+# What is Agent Session Manager?
 
-Claude Session Manager is a native Linux desktop app that gives your
+Agent Session Manager is a native Linux desktop app that gives your
 [Claude Code](https://claude.com/claude-code) sessions a proper home.
 
-![Claude Session Manager](https://raw.githubusercontent.com/r4nd3l/claude-session-manager/main/data/screenshot.png)
+![Agent Session Manager](https://raw.githubusercontent.com/r4nd3l/agent-session-manager/main/data/screenshot.png)
 
 If you use Claude Code daily, you accumulate **dozens of sessions** scattered
 across every project you touch. They live as JSONL transcripts under
@@ -17,9 +17,9 @@ that matter, and opens any of them in an **embedded terminal tab** that runs
 `claude --resume` right where the session started.
 
 ::: tip Unofficial community tool
-Claude Session Manager is not affiliated with or endorsed by Anthropic. It is
+Agent Session Manager is not affiliated with or endorsed by Anthropic. It is
 strictly read-only with respect to Claude Code's data — names, favorites, and
-all app state live in `~/.config/claude-session-manager/`. Your transcripts
+all app state live in `~/.config/agent-session-manager/`. Your transcripts
 are never modified.
 :::
 
@@ -37,10 +37,10 @@ are never modified.
 ## How it compares
 
 Claude Code is a terminal program, and you can absolutely keep using it bare.
-Claude Session Manager is a layer *on top* — it doesn't replace the CLI, it
+Agent Session Manager is a layer *on top* — it doesn't replace the CLI, it
 launches and organizes it:
 
-| | Bare `claude --resume` | Claude Session Manager |
+| | Bare `claude --resume` | Agent Session Manager |
 | --- | --- | --- |
 | See all sessions across projects | ❌ | ✅ |
 | Custom names & favorites | ❌ | ✅ |

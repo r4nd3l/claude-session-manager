@@ -2,7 +2,7 @@
 
 A running overview of what's shipped and what's planned. For the full notes and
 downloads of each version, see the
-[GitHub releases](https://github.com/r4nd3l/claude-session-manager/releases).
+[GitHub releases](https://github.com/r4nd3l/agent-session-manager/releases).
 
 ## Roadmap
 

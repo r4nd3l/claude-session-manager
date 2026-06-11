@@ -2,7 +2,7 @@
 
 ## Requirements
 
-Claude Session Manager is a GTK4 app. You'll need:
+Agent Session Manager is a GTK4 app. You'll need:
 
 - **Python ≥ 3.10**
 - **GTK 4**, **libadwaita ≥ 1.5**, **VTE** (the GTK 4 build), and **PyGObject**
@@ -30,51 +30,51 @@ sudo pacman -S python-gobject gtk4 libadwaita vte4
 
 ### Arch Linux — AUR
 
-Available on the [AUR](https://aur.archlinux.org/packages/claude-session-manager)
-as `claude-session-manager`:
+Available on the [AUR](https://aur.archlinux.org/packages/agent-session-manager)
+as `agent-session-manager`:
 
 ```bash
-yay -S claude-session-manager   # or: paru -S claude-session-manager
+yay -S agent-session-manager   # or: paru -S agent-session-manager
 ```
 
 ### Ubuntu — PPA
 
 ```bash
-sudo add-apt-repository ppa:matemiller992/claude-session-manager
+sudo add-apt-repository ppa:matemiller992/agent-session-manager
 sudo apt update
-sudo apt install claude-session-manager
+sudo apt install agent-session-manager
 ```
 
 ### Debian / Ubuntu — `.deb`
 
 Or grab the latest `.deb` from the
-[releases page](https://github.com/r4nd3l/claude-session-manager/releases/latest)
+[releases page](https://github.com/r4nd3l/agent-session-manager/releases/latest)
 and install it — dependencies are pulled in automatically:
 
 ```bash
-sudo apt install ./claude-session-manager_*_all.deb
+sudo apt install ./agent-session-manager_*_all.deb
 ```
 
-Either way it appears in your app grid as **Claude Session Manager**.
+Either way it appears in your app grid as **Agent Session Manager**.
 
 ### PyPI — `pipx`
 
 Published as
-[`claude-session-manager-gtk`](https://pypi.org/project/claude-session-manager-gtk/).
+[`agent-session-manager-gtk`](https://pypi.org/project/agent-session-manager-gtk/).
 The GTK/VTE bindings come from your system, so install with system site
 packages (and make sure the [requirements](#requirements) above are present):
 
 ```bash
-pipx install --system-site-packages claude-session-manager-gtk
+pipx install --system-site-packages agent-session-manager-gtk
 ```
 
-The installed command is `claude-session-manager`.
+The installed command is `agent-session-manager`.
 
 ### From source
 
 ```bash
-git clone https://github.com/r4nd3l/claude-session-manager.git
-cd claude-session-manager
+git clone https://github.com/r4nd3l/agent-session-manager.git
+cd agent-session-manager
 python3 -m claude_session_manager
 ```
 

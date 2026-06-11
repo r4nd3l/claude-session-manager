@@ -1,23 +1,23 @@
-# Claude Session Manager
+# Agent Session Manager
 
-[![CI](https://github.com/r4nd3l/claude-session-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/r4nd3l/claude-session-manager/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/claude-session-manager-gtk?label=PyPI)](https://pypi.org/project/claude-session-manager-gtk/)
-[![AUR](https://img.shields.io/aur/version/claude-session-manager?label=AUR)](https://aur.archlinux.org/packages/claude-session-manager)
-[![Release](https://img.shields.io/github/v/release/r4nd3l/claude-session-manager?label=release)](https://github.com/r4nd3l/claude-session-manager/releases/latest)
+[![CI](https://github.com/r4nd3l/agent-session-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/r4nd3l/agent-session-manager/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/agent-session-manager-gtk?label=PyPI)](https://pypi.org/project/agent-session-manager-gtk/)
+[![AUR](https://img.shields.io/aur/version/agent-session-manager?label=AUR)](https://aur.archlinux.org/packages/agent-session-manager)
+[![Release](https://img.shields.io/github/v/release/r4nd3l/agent-session-manager?label=release)](https://github.com/r4nd3l/agent-session-manager/releases/latest)
 
 Native GTK4/libadwaita desktop app to manage [Claude Code](https://claude.com/claude-code) sessions.
 
-📖 **[Documentation](https://r4nd3l.github.io/claude-session-manager/)**
+📖 **[Documentation](https://r4nd3l.github.io/agent-session-manager/)**
 
 > **Unofficial community tool.** Not affiliated with or endorsed by Anthropic.
 > It never modifies Claude Code's own data — all app state lives in its own config file.
 
-![Claude Session Manager](data/screenshot.png)
+![Agent Session Manager](data/screenshot.png)
 
 Features:
 
 - **Sidebar** lists every session found under `~/.claude/projects/`, grouped by project (collapsible headers, with collapse-all/expand-all buttons next to the search box), with a **Favorites** section pinned on top — star a session to move it there. A **search box** filters by name, project, preview, or session id, and the list **updates live** as sessions are created or written to.
-- Sessions can be given **custom names** (pencil icon). Names, favorites, and hidden sessions persist in `~/.config/claude-session-manager/state.json` — Claude's own session files are never modified.
+- Sessions can be given **custom names** (pencil icon). Names, favorites, and hidden sessions persist in `~/.config/agent-session-manager/state.json` — Claude's own session files are never modified.
 - **Clicking a session** opens a tab in the main area; each tab is an embedded **VTE terminal** running your `$SHELL` with `claude --resume <session-id>` typed into it, in the session's original project directory. When claude exits you drop to a shell prompt; the tab closes when the shell exits. Closing a tab asks Claude to exit cleanly (`/exit`) in the background first.
 - **In-terminal search** with a find bar (`Ctrl+Shift+G`) over the tab's scrollback.
 - **Status dots** in both the sidebar and on each open tab: green = open, blue = output arrived in a background tab. A **waiting badge** (amber ?) marks sessions where Claude's last message was a question awaiting your reply.
@@ -64,37 +64,38 @@ sudo pacman -S python-gobject gtk4 libadwaita vte4
 Plus the [`claude` CLI](https://claude.com/claude-code) on your `PATH`.
 
 > Installing with `pipx`? PyGObject comes from the system, so use
-> `pipx install --system-site-packages claude-session-manager-gtk`.
+> `pipx install --system-site-packages agent-session-manager-gtk`.
 
 ## Install
 
 **Ubuntu — PPA:**
 
 ```bash
-sudo add-apt-repository ppa:matemiller992/claude-session-manager
-sudo apt update && sudo apt install claude-session-manager
+sudo add-apt-repository ppa:matemiller992/agent-session-manager
+sudo apt update && sudo apt install agent-session-manager
 ```
 
-**Arch — AUR:** `yay -S claude-session-manager`
+**Arch — AUR:** `yay -S agent-session-manager`
 
-**Any distro — pipx:** `pipx install --system-site-packages claude-session-manager-gtk`
+**Any distro — pipx:** `pipx install --system-site-packages agent-session-manager-gtk`
 
-**Debian/Ubuntu — .deb package** (from the [latest release](https://github.com/r4nd3l/claude-session-manager/releases/latest)):
+**Debian/Ubuntu — .deb package** (from the [latest release](https://github.com/r4nd3l/agent-session-manager/releases/latest)):
 
 ```bash
-sudo apt install ./claude-session-manager_0.8.0_all.deb
+sudo apt install ./agent-session-manager_0.8.0_all.deb
 ```
 
-Dependencies are pulled in automatically; the app appears in your app grid as "Claude Session Manager".
+Dependencies are pulled in automatically; the app appears in your app grid as "Agent Session Manager".
 
 **From source:**
 
 ```bash
-cd ClaudeSessionManager
+git clone https://github.com/r4nd3l/agent-session-manager.git
+cd agent-session-manager
 python3 -m claude_session_manager
 ```
 
-Or install the desktop launcher + icon (shows up in the app grid as "Claude Session Manager"):
+Or install the desktop launcher + icon (shows up in the app grid as "Agent Session Manager"):
 
 ```bash
 ./data/install.sh
@@ -113,8 +114,8 @@ claude_session_manager/
 ├── prefs.py      # preferences dialog
 └── terminal.py   # VTE terminal tab spawning the claude CLI
 data/
-├── io.github.r4nd3l.ClaudeSessionManager.desktop   # launcher template
-├── icons/io.github.r4nd3l.ClaudeSessionManager.svg # app icon
+├── io.github.r4nd3l.AgentSessionManager.desktop   # launcher template
+├── icons/io.github.r4nd3l.AgentSessionManager.svg # app icon
 └── install.sh                              # install launcher + icon for current user
 scripts/
 ├── build_deb.sh                            # build the .deb package into dist/
@@ -126,7 +127,7 @@ scripts/
 Releases are one step: **push a `v*` tag**. `.github/workflows/release.yml` then
 builds the wheel/sdist and the `.deb`, creates the GitHub Release (with the
 `.deb` attached and auto-generated notes), and publishes to
-[PyPI](https://pypi.org/project/claude-session-manager-gtk/) via **trusted
+[PyPI](https://pypi.org/project/agent-session-manager-gtk/) via **trusted
 publishing** (OIDC — no API tokens).
 
 ```bash
@@ -135,7 +136,7 @@ git tag -a v0.8.0 -m v0.8.0 && git push origin v0.8.0
 ```
 
 PyPI trusted-publisher setup expects workflow `release.yml` (owner `r4nd3l`,
-repo `claude-session-manager`). The AUR and PPA are updated separately
+repo `agent-session-manager`). The AUR and PPA are updated separately
 (see `packaging/`).
 
 ## Roadmap

@@ -2,20 +2,20 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: 'Claude Session Manager',
+  title: 'Agent Session Manager',
   description: 'A native Linux home for your Claude Code sessions.',
   lang: 'en-US',
-  base: '/claude-session-manager/',
+  base: '/agent-session-manager/',
   lastUpdated: true,
   cleanUrls: true,
 
   head: [
     ['meta', { name: 'theme-color', content: '#D97757' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: 'Claude Session Manager' }],
+    ['meta', { property: 'og:title', content: 'Agent Session Manager' }],
     ['meta', {
       property: 'og:image',
-      content: 'https://raw.githubusercontent.com/r4nd3l/claude-session-manager/main/data/banner.png',
+      content: 'https://raw.githubusercontent.com/r4nd3l/agent-session-manager/main/data/banner.png',
     }],
   ],
 
@@ -31,7 +31,7 @@ export default defineConfig({
         {
           text: 'Introduction',
           items: [
-            { text: 'What is Claude Session Manager?', link: '/guide/introduction' },
+            { text: 'What is Agent Session Manager?', link: '/guide/introduction' },
             { text: 'Getting Started', link: '/guide/getting-started' },
           ],
         },
@@ -47,11 +47,11 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/r4nd3l/claude-session-manager' },
+      { icon: 'github', link: 'https://github.com/r4nd3l/agent-session-manager' },
     ],
 
     editLink: {
-      pattern: 'https://github.com/r4nd3l/claude-session-manager/edit/main/docs/:path',
+      pattern: 'https://github.com/r4nd3l/agent-session-manager/edit/main/docs/:path',
       text: 'Edit this page on GitHub',
     },
 
